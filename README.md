@@ -11,6 +11,14 @@ từ E-HSMT mẫu do Bộ Tài chính ban hành, kèm công cụ tách biểu m�
 
 ## Bộ có sẵn — dùng ngay, không cần cài gì
 
+| Bộ | Loại gói thầu | Word | Excel | Thư mục |
+|:--|:--|--:|--:|:--|
+| `EPC-10A` | EPC — thiết kế, cung cấp hàng hóa và xây lắp | 32 | 30 | `templates/EPC-10A/` |
+| `Xay-lap-3A` | Xây lắp | 25 | 22 | `templates/Xay-lap-3A/` |
+| `Hang-hoa-4A` | Mua sắm hàng hóa | 32 | 29 | `templates/Hang-hoa-4A/` |
+| `EC-8A` | EC — thiết kế và xây lắp | 26 | 23 | `templates/EC-8A/` |
+| `PC-9A` | PC — cung cấp hàng hóa và xây lắp | 35 | 32 | `templates/PC-9A/` |
+
 ```text
 templates/EPC-10A/          ← 32 biểu mẫu HSDT gói EPC (Chương IV, Mẫu số 10A)
 ├── TT79-M02.docx             Đơn dự thầu
@@ -20,12 +28,14 @@ templates/EPC-10A/          ← 32 biểu mẫu HSDT gói EPC (Chương IV, Mẫ
 ├── TT79-M06A..06D.docx/.xlsx Nhân sự chủ chốt · Lý lịch · Kinh nghiệm · Thiết bị thi công
 ├── TT79-M07..09C.docx/.xlsx  Lịch sử HĐ · Tài chính · Nhà thầu phụ
 ├── TT79-M10A..13C.docx/.xlsx Tiến độ · Giá hàng hóa · Bảng giá dự thầu · Công nhật · Ưu đãi
-└── DANH-MUC-BIEU-MAU.md      danh mục 32 mẫu
+└── DANH-MUC-BIEU-MAU.md      danh mục biểu mẫu của bộ
 
 sources/                    ← E-HSMT mẫu chính thức (EPC · xây lắp · hàng hóa · EC · PC)
 demo_output/                ← bộ demo: đã điền dữ liệu mẫu vào 06A / 06D / 10B
 examples/preview/           ← ảnh render của Mẫu 02, 03, 06A, 11.1A
 ```
+
+Danh mục tổng hợp 5 bộ: [`templates/DANH-MUC-TONG-HOP.md`](templates/DANH-MUC-TONG-HOP.md)
 
 | Mẫu 02 — Đơn dự thầu | Mẫu 03 — Thỏa thuận liên danh |
 |:--|:--|
@@ -37,17 +47,18 @@ examples/preview/           ← ảnh render của Mẫu 02, 03, 06A, 11.1A
 
 ---
 
-## Dùng cho loại gói thầu khác
+## Tách lại / tách cho gói thầu thực tế
 
 ```bash
-# EPC đã có sẵn; các loại khác tách từ nguồn trong sources/
-python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx  out/xay-lap
-python3 scripts/tt79_extract.py sources/TT79-M4A-E-HSMT-Hang-hoa-01-tui.docx out/hang-hoa
-python3 scripts/tt79_extract.py sources/TT79-M8A-E-HSMT-EC-01-tui.docx       out/ec
-python3 scripts/tt79_extract.py sources/TT79-M9A-E-HSMT-PC-01-tui.docx       out/pc
+# tách lại một bộ có sẵn (nguồn trong sources/)
+python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx out/xay-lap
 
-# hoặc từ E-HSMT thực tế của gói thầu (file Chương IV)
-python3 scripts/tt79_extract.py "E-HSMT gói thầu X.docx" out --only 02,03,06,11
+# tách từ E-HSMT thực tế của gói thầu đang làm (file Chương IV)
+python3 scripts/tt79_extract.py "E-HSMT gói thầu X.docx" out
+
+# chỉ lấy một số mẫu, hoặc chỉ Word
+python3 scripts/tt79_extract.py "E-HSMT.docx" out --only 02,03,06,11
+python3 scripts/tt79_extract.py "E-HSMT.docx" out --no-excel
 ```
 
 Ra: `TT79-M<mã>.docx` + `TT79-M<mã>.xlsx` (mỗi bảng → 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
@@ -96,7 +107,7 @@ Chi tiết: [`references/tt79-layout.md`](references/tt79-layout.md) · danh m�
 hsdt-forms-skill/
 ├── SKILL.md                    # hướng dẫn cho agent
 ├── sources/                    # E-HSMT mẫu chính thức TT79 (EPC, xây lắp, hàng hóa, EC, PC)
-├── templates/EPC-10A/          # 32 biểu mẫu HSDT EPC đã tách (Word + Excel)
+├── templates/                  # 5 bộ biểu mẫu đã tách (EPC, xây lắp, hàng hóa, EC, PC)
 ├── demo_output/                # bộ demo có dữ liệu mẫu
 ├── examples/
 │   ├── demo_project.py

@@ -61,10 +61,14 @@ sources/                     ← E-HSMT mẫu chính thức (TT79)
 ├── TT79-M8A-E-HSMT-EC-01-tui.docx
 └── TT79-M9A-E-HSMT-PC-01-tui.docx
 
-templates/EPC-10A/           ← đã tách sẵn cho gói EPC (32 biểu mẫu)
-├── TT79-M02-DON-DU-THAU.docx        … Word: in / ký / scan / tham chiếu
-├── TT79-M06A-BANG-DE-XUAT-NHAN-SU-CHU-CHOT.xlsx … Excel: bảng nhiều dòng
-└── DANH-MUC-BIEU-MAU.md
+templates/                   ← 5 bộ đã tách sẵn (copy là dùng ngay)
+├── EPC-10A/       32 Word + 30 Excel   gói EPC
+├── Xay-lap-3A/    25 Word + 22 Excel   gói xây lắp
+├── Hang-hoa-4A/   32 Word + 29 Excel   gói mua sắm hàng hóa
+├── EC-8A/         26 Word + 23 Excel   gói EC
+├── PC-9A/         35 Word + 32 Excel   gói PC
+└── DANH-MUC-TONG-HOP.md
+Mỗi bộ: `TT79-M02.docx` (Word: in/ký/scan) · `TT79-M06A.xlsx` (Excel: bảng nhiều dòng) · `DANH-MUC-BIEU-MAU.md`
 ```
 
 ---
@@ -72,7 +76,17 @@ templates/EPC-10A/           ← đã tách sẵn cho gói EPC (32 biểu mẫu)
 ## 2. Chạy nhanh
 
 ### 2.0. Dùng ngay bộ có sẵn (không cần Python)
-Copy `templates/EPC-10A/*` cho gói EPC. Với loại gói khác, xem §2.1.
+Chọn đúng bộ theo loại gói thầu trong `templates/` rồi copy ra thư mục làm việc:
+
+| Loại gói | Bộ |
+|:--|:--|
+| EPC (tư vấn + hàng hóa + xây lắp) | `templates/EPC-10A/` |
+| Xây lắp | `templates/Xay-lap-3A/` |
+| Mua sắm hàng hóa | `templates/Hang-hoa-4A/` |
+| EC (tư vấn + xây lắp) | `templates/EC-8A/` |
+| PC (hàng hóa + xây lắp) | `templates/PC-9A/` |
+
+Gói EPC hai túi hồ sơ hoặc gói thực tế: xem §2.1.
 
 ### 2.1. Tách bộ biểu mẫu cho loại gói thầu khác
 ```bash
@@ -142,7 +156,9 @@ rồi nhập lên; file Word dùng để in/ký/scan khi HSMT yêu cầu bản g
 | Chi phí khác | 12A Bảng kê công nhật · 12B Khoản tạm tính · 12C Số liệu điều chỉnh |
 | Ưu đãi | 13A Hàng hóa hưởng ưu đãi · 13B/13C Chi phí sản xuất trong nước |
 
-Bảng chi tiết + tên file: `templates/EPC-10A/DANH-MUC-BIEU-MAU.md`.
+Bảng chi tiết + tên file: `templates/<bộ>/DANH-MUC-BIEU-MAU.md`; danh mục 5 bộ: `templates/DANH-MUC-TONG-HOP.md`.
+
+Số mẫu khác nhau giữa các loại gói (EPC 32 · xây lắp 25 · hàng hóa 32 · EC 26 · PC 35) — gói xây lắp không có mẫu 05A2/05A3, gói hàng hóa không có 05A1/05A3…
 
 ---
 
@@ -164,7 +180,7 @@ Bảng chi tiết + tên file: `templates/EPC-10A/DANH-MUC-BIEU-MAU.md`.
 hsdt-forms/
 ├── SKILL.md
 ├── sources/                 # E-HSMT mẫu chính thức (TT79/2025/TT-BTC)
-├── templates/EPC-10A/       # 32 biểu mẫu EPC đã tách (Word + Excel)
+├── templates/               # 5 bộ biểu mẫu đã tách (EPC, xây lắp, hàng hóa, EC, PC)
 ├── examples/demo_project.py # điền dữ liệu mẫu vào vài bảng để xem trước
 ├── scripts/
 │   ├── tt79_extract.py      # tách biểu mẫu từ E-HSMT mẫu  ← công cụ chính
