@@ -8,7 +8,7 @@ description: >
   "bảng tổng hợp giá dự thầu", "bảng kê công nhật", "hàng hóa hưởng ưu đãi",
   "E-HSMT mẫu", "Mẫu số 10A", "webform E-HSDT", "tách biểu mẫu từ HSMT".
   Cũng dùng khi cần chuẩn hoá khổ giấy / lề / font cho file .docx đấu thầu.
-  NOT for: soạn công văn – tờ trình – quyết định hành chính (thể thức NĐ30, dùng template riêng);
+  NOT for: soạn công văn – tờ trình – quyết định hành chính (thể thức NĐ 30/2020/NĐ-CP — dùng skill `nd30-forms`);
   bóc khối lượng kỹ thuật / lập BOQ (dùng skill BOQ).
 date: 2026-10-05
 tags: [skill, hsdt, dau-thau, tt79, muasamcong, docx, xlsx, e-hsmt]

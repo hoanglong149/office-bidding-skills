@@ -1,131 +1,115 @@
-# hsdt-forms
+# skills — Biểu mẫu & Văn bản (Việt Nam)
 
-Bộ **biểu mẫu Hồ sơ dự thầu (HSDT / E-HSDT)** đúng chuẩn **Thông tư 79/2025/TT-BTC** — tách nguyên trạng
-từ E-HSMT mẫu do Bộ Tài chính ban hành, kèm công cụ tách biểu mẫu cho **mọi loại gói thầu**.
+Monorepo chứa **2 skill độc lập** cho agent (omp / Claude Code / Cursor), phục vụ công việc đấu thầu
+và văn phòng theo đúng chuẩn pháp lý Việt Nam:
 
-> ⚠️ **Không phải biểu mẫu NĐ 30**. HSDT không dùng thể thức văn bản hành chính:
-> không có `Số: …/…-HSDT`, không có `Hà Nội, ngày …`, không có khối tiêu đề 2 cột.
-> Đầu biểu mẫu là `Mẫu số 02 (webform trên Hệ thống)` — căn phải, đậm, 14 pt.
+| Skill | Chuẩn | Dùng cho |
+|:--|:--|:--|
+| [`skills/hsdt-forms`](skills/hsdt-forms/) | **Thông tư 79/2025/TT-BTC** | Biểu mẫu Hồ sơ dự thầu (E-HSDT): đơn dự thầu, thỏa thuận liên danh, bảo lãnh, nhân sự, thiết bị, tài chính, bảng giá dự thầu… |
+| [`skills/nd30-forms`](skills/nd30-forms/) | **Nghị định 30/2020/NĐ-CP** | Văn bản hành chính & xử lý file văn phòng: công văn, quyết định, tờ trình, báo cáo, biên bản, thông báo… + Word/Excel/Slide/PDF |
 
----
-
-## Bộ có sẵn — dùng ngay, không cần cài gì
-
-| Bộ | Loại gói thầu | Word | Excel | Thư mục |
-|:--|:--|--:|--:|:--|
-| `EPC-10A` | EPC — thiết kế, cung cấp hàng hóa và xây lắp | 32 | 30 | `templates/EPC-10A/` |
-| `Xay-lap-3A` | Xây lắp | 25 | 22 | `templates/Xay-lap-3A/` |
-| `Hang-hoa-4A` | Mua sắm hàng hóa | 32 | 29 | `templates/Hang-hoa-4A/` |
-| `EC-8A` | EC — thiết kế và xây lắp | 26 | 23 | `templates/EC-8A/` |
-| `PC-9A` | PC — cung cấp hàng hóa và xây lắp | 35 | 32 | `templates/PC-9A/` |
-
-```text
-templates/EPC-10A/          ← 32 biểu mẫu HSDT gói EPC (Chương IV, Mẫu số 10A)
-├── TT79-M02.docx             Đơn dự thầu
-├── TT79-M03.docx             Thỏa thuận liên danh
-├── TT79-M04A.docx / 04B.docx Bảo lãnh dự thầu (độc lập / liên danh)
-├── TT79-M05A1..05B.docx      Hợp đồng tương tự · Năng lực sản xuất
-├── TT79-M06A..06D.docx/.xlsx Nhân sự chủ chốt · Lý lịch · Kinh nghiệm · Thiết bị thi công
-├── TT79-M07..09C.docx/.xlsx  Lịch sử HĐ · Tài chính · Nhà thầu phụ
-├── TT79-M10A..13C.docx/.xlsx Tiến độ · Giá hàng hóa · Bảng giá dự thầu · Công nhật · Ưu đãi
-└── DANH-MUC-BIEU-MAU.md      danh mục biểu mẫu của bộ
-
-sources/                    ← E-HSMT mẫu chính thức (EPC · xây lắp · hàng hóa · EC · PC)
-demo_output/                ← bộ demo: đã điền dữ liệu mẫu vào 06A / 06D / 10B
-examples/preview/           ← ảnh render của Mẫu 02, 03, 06A, 11.1A
-```
-
-Danh mục tổng hợp 5 bộ: [`templates/DANH-MUC-TONG-HOP.md`](templates/DANH-MUC-TONG-HOP.md)
-
-| Mẫu 02 — Đơn dự thầu | Mẫu 03 — Thỏa thuận liên danh |
-|:--|:--|
-| ![Mẫu 02](examples/preview/TT79-M02.docx.png) | ![Mẫu 03](examples/preview/TT79-M03.docx.png) |
-
-| Mẫu 06A — Nhân sự chủ chốt (Excel) | Mẫu 11.1A — Bảng tổng hợp giá dự thầu |
-|:--|:--|
-| ![Mẫu 06A](examples/preview/TT79-M06A.xlsx.png) | ![Mẫu 11.1A](examples/preview/TT79-M11.1A.xlsx.png) |
-
----
-
-## Tách lại / tách cho gói thầu thực tế
-
-```bash
-# tách lại một bộ có sẵn (nguồn trong sources/)
-python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx out/xay-lap
-
-# tách từ E-HSMT thực tế của gói thầu đang làm (file Chương IV)
-python3 scripts/tt79_extract.py "E-HSMT gói thầu X.docx" out
-
-# chỉ lấy một số mẫu, hoặc chỉ Word
-python3 scripts/tt79_extract.py "E-HSMT.docx" out --only 02,03,06,11
-python3 scripts/tt79_extract.py "E-HSMT.docx" out --no-excel
-```
-
-Ra: `TT79-M<mã>.docx` + `TT79-M<mã>.xlsx` (mỗi bảng → 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
-Tách 32 biểu mẫu mất **< 1 giây** (giữ nguyên 100 % định dạng gốc).
+> Hai chuẩn này **khác nhau về thể thức** — không trộn:
+> HSDT **không có** `Số: …/…`, không có `Hà Nội, ngày …`, không có khối tiêu đề 2 cột.
+> Văn bản hành chính thì **bắt buộc** có.
 
 ---
 
 ## Cài đặt
 
-- **Chỉ dùng biểu mẫu** (`templates/`): không cần gì.
-- **Chạy script**: Python 3.9+ và `pip install -r requirements.txt` (`lxml`, `python-docx`, `openpyxl`).
-
-### Dùng như skill cho agent
 ```bash
 git clone https://github.com/hoanglong149/hsdt-forms-skill.git
-cp -r hsdt-forms-skill ~/.agents/skills/hsdt-forms        # user-level
-# hoặc: cp -r hsdt-forms-skill <workspace>/.agents/skills/hsdt-forms
-```
-Agent tự đọc `SKILL.md` khi gặp task về HSDT / biểu mẫu dự thầu / TT79.
+cd hsdt-forms-skill
 
-### Lệnh khác
-```bash
-python3 scripts/fix_page_setup.py --check file.docx   # kiểm khổ giấy / lề / font / số trang
-python3 scripts/fix_page_setup.py         file.docx   # sửa (tạo .bak)
-python3 examples/demo_project.py demo_output          # demo: chép mẫu + điền dữ liệu mẫu
+# cài cả hai (user-level)
+cp -r skills/hsdt-forms skills/nd30-forms ~/.agents/skills/
+
+# hoặc chỉ một, hoặc theo project
+cp -r skills/hsdt-forms ~/.agents/skills/hsdt-forms
+cp -r skills/nd30-forms  <workspace>/.agents/skills/nd30-forms
 ```
+
+Agent tự đọc `SKILL.md` của skill phù hợp khi gặp task tương ứng.
+
+### Yêu cầu
+- **Chỉ dùng bộ biểu mẫu có sẵn**: không cần gì.
+- **Chạy script**: Python 3.9+ và `pip install lxml python-docx openpyxl` (một số script NĐ30 cần thêm
+  `python-pptx`, `pypdf`, `python-docx`).
 
 ---
 
-## Vì sao tách nguyên trạng
+## 1. `hsdt-forms` — Biểu mẫu HSDT theo TT 79/2025/TT-BTC
 
-| Cách | Rủi ro |
+Bộ biểu mẫu **tách nguyên trạng** từ E-HSMT mẫu của Bộ Tài chính (Chương IV — Biểu mẫu mời thầu và dự thầu),
+giữ 100 % định dạng gốc; kèm công cụ tách cho mọi loại gói thầu.
+
+| Bộ trong `skills/hsdt-forms/templates/` | Loại gói thầu | Word | Excel |
+|:--|:--|--:|--:|
+| `EPC-10A` | EPC | 32 | 30 |
+| `Xay-lap-3A` | Xây lắp | 25 | 22 |
+| `Hang-hoa-4A` | Mua sắm hàng hóa | 32 | 29 |
+| `EC-8A` | EC | 26 | 23 |
+| `PC-9A` | PC | 35 | 32 |
+
+```bash
+cd skills/hsdt-forms
+python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx out/xay-lap
+python3 scripts/fix_page_setup.py --check file.docx
+```
+
+| Mẫu 02 — Đơn dự thầu | Mẫu 06A — Nhân sự chủ chốt |
 |:--|:--|
-| Dựng lại mẫu bằng tay | thiếu cột, sai cỡ chữ 14 pt, mất ghi chú `(1) (2)`, sai số mẫu |
-| **Tách từ E-HSMT mẫu** | chỉ xoá phần ngoài biểu mẫu — giữ nguyên `styles.xml`, footer, gộp ô, ký hiệu chú thích |
+| ![Mẫu 02](skills/hsdt-forms/examples/preview/TT79-M02.docx.png) | ![Mẫu 06A](skills/hsdt-forms/examples/preview/TT79-M06A.xlsx.png) |
 
-Script giữ lại `<w:sectPr>` (khổ A4, lề 20/20/30/20) — thiếu nó Word dùng khổ Letter, lề 1 inch.
+---
 
-Chi tiết: [`references/tt79-layout.md`](references/tt79-layout.md) · danh mục & căn cứ: [`references/tt79-forms.md`](references/tt79-forms.md)
+## 2. `nd30-forms` — Văn bản hành chính NĐ 30 & xử lý file văn phòng
+
+Bộ quy chuẩn trình bày + mẫu văn bản hành chính, kèm công cụ tạo/sửa/chuyển đổi file.
+
+| Thành phần | Nội dung |
+|:--|:--|
+| `standards/nd30.md` + `standards/structure/` | Quy chuẩn thể thức NĐ 30: khổ giấy, lề, typography, heading, bảng, header/footer, bìa, caption |
+| `standards/color/` | 4 bộ phối màu Word + palette Excel/Slide |
+| `templates/` | 10 mẫu: công văn, quyết định, tờ trình, báo cáo, biên bản, thông báo, kế hoạch, giấy mời/ủy quyền, template chung, đề xuất |
+| `scripts/office/` | Unpack/Pack XML (giữ format mẫu), validate, clone text |
+| `scripts/format/` | Chuẩn hoá định dạng `.docx` |
+| `scripts/convert/` | MD→DOCX, PDF→DOCX, batch PDF→MD |
+| `resources/` | Cách dùng thư viện: docx, xlsx, pptx, pdf, office-xml, convert |
+
+```bash
+cd skills/nd30-forms
+python3 scripts/office/unpack.py file.docx ./work      # bung để sửa XML
+python3 scripts/office/pack.py  ./work file-moi.docx   # đóng gói lại
+```
 
 ---
 
 ## Cấu trúc repo
 
 ```text
-hsdt-forms-skill/
-├── SKILL.md                    # hướng dẫn cho agent
-├── sources/                    # E-HSMT mẫu chính thức TT79 (EPC, xây lắp, hàng hóa, EC, PC)
-├── templates/                  # 5 bộ biểu mẫu đã tách (EPC, xây lắp, hàng hóa, EC, PC)
-├── demo_output/                # bộ demo có dữ liệu mẫu
-├── examples/
-│   ├── demo_project.py
-│   └── preview/*.png
-├── scripts/
-│   ├── tt79_extract.py         # tách biểu mẫu từ E-HSMT mẫu  ← công cụ chính
-│   └── fix_page_setup.py       # chuẩn hoá khổ giấy / lề / font / số trang
-└── references/
-    ├── tt79-forms.md           # danh mục 32 mẫu + căn cứ pháp lý
-    └── tt79-layout.md          # đặc tả định dạng + 3 lỗi thường gặp
+.
+├── README.md
+├── LICENSE
+└── skills/
+    ├── hsdt-forms/          # skill 1 — TT 79/2025/TT-BTC
+    │   ├── SKILL.md
+    │   ├── sources/         # E-HSMT mẫu chính thức
+    │   ├── templates/       # 5 bộ biểu mẫu HSDT đã tách
+    │   ├── scripts/         # tt79_extract.py, fix_page_setup.py
+    │   ├── references/      # danh mục mẫu, đặc tả định dạng
+    │   ├── examples/        # demo + ảnh render
+    │   └── demo_output/
+    └── nd30-forms/          # skill 2 — NĐ 30/2020/NĐ-CP
+        ├── SKILL.md
+        ├── standards/       # nd30.md, structure/, color/
+        ├── templates/       # mẫu văn bản hành chính
+        ├── scripts/         # office/, format/, convert/
+        ├── resources/
+        ├── examples/
+        └── tests/
 ```
-
-## Ghi chú pháp lý
-
-- `sources/` chứa phụ lục E-HSMT mẫu do Bộ Tài chính ban hành kèm TT 79/2025/TT-BTC (văn bản công khai).
-- Không chứa dữ liệu gói thầu cụ thể; toàn bộ trường dữ liệu là placeholder `____ [hướng dẫn]` theo nguyên bản.
-- Luôn đối chiếu **Chương IV của E-HSMT thực tế** — số mẫu và tên mẫu có thể khác bộ mẫu chuẩn.
 
 ## License
 
-MIT — xem [LICENSE](LICENSE).
+MIT — xem [LICENSE](LICENSE). Riêng `skills/hsdt-forms/sources/` chứa phụ lục E-HSMT mẫu do
+Bộ Tài chính ban hành kèm TT 79/2025/TT-BTC (văn bản công khai).
