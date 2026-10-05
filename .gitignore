@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+hsdt_forms/
+*.bak
+.DS_Store
