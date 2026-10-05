@@ -26,9 +26,10 @@ Trích từ file HSDT thật của gói EPC Phả Lại (Nhà thầu liên danh 
 
 | Thông số | Giá trị | Nguồn |
 |:--|:--|:--|
-| Khổ giấy | **US Letter 216 × 279 mm** (`pgSz 12240 × 15840`) | file thật |
+| Khổ giấy | **A4 210 × 297 mm** (mặc định; `--paper letter` nếu HSMT yêu cầu Letter) | theo chuẩn VN |
 | Lề | trên/dưới 20 mm · trái 30 mm · phải 20 mm | `pgMar 1134/1134/1134/1701` |
 | Khoảng cách header / footer | 11,2 mm / 14,9 mm (`635` / `845`) | file thật |
+| Số trang | **footer**, canh giữa, field `PAGE`, 12 pt (header chỉ còn letterhead) | yêu cầu gói |
 | Chữ trong bảng | **Times New Roman 13 pt** (`sz=26`) | file thật |
 | Hàng tiêu đề bảng | in đậm, canh giữa | file thật |
 | Ô | `vAlign=center`, canh lề giữa cho hàng đầu, viền `single sz=4` (0,5 pt) | file thật |
@@ -44,8 +45,10 @@ Bảng **không viền**, 3 cột `5670 | 2381 | 1701` dxa, `trHeight 361`:
 | 2 | logo (tuỳ chọn) |
 | 3 | logo (tuỳ chọn) |
 
-Nội dung cũ trong header (field `PAGE`) được **giữ lại** bên dưới letterhead; giá trị cache của
-field được đưa về `1` để bản xem trước không hiện số trang của HSMT gốc.
+Field `PAGE` trong header **được chuyển xuống footer** (mặc định `--page-number footer`):
+header chỉ còn letterhead, chân trang có số trang canh giữa. Giá trị cache của field đưa về `1`.
+
+Logo: mặc định cao **18 mm**, giữ đúng tỉ lệ ảnh, đổi bằng `--logo-height` (mm).
 
 Điểm bắt buộc: file phải **tham chiếu** header trong `w:sectPr`
 (`<w:headerReference w:type="default" r:id="…"/>`). Nhiều file tách từ E-HSMT có part
@@ -55,14 +58,30 @@ field được đưa về `1` để bản xem trước không hiện số trang 
 
 ## 3. Lệnh
 
+**Không hard-code tên gói vào biểu mẫu** — mỗi gói một file cấu hình trong `projects/`:
+
+```bash
+cp projects/_template.json projects/<mã-gói>.json     # rồi điền tên thật
+python3 scripts/apply_project_format.py templates/EPC-10A \
+  --config projects/<mã-gói>.json --out out/<mã-gói>
+```
+
+Hoặc truyền trực tiếp:
+
 ```bash
 python3 scripts/apply_project_format.py templates/EPC-10A \
-  --project "<tên dự án>" \
-  --package "<tên gói thầu>" \
-  --logo-right assets/logo-ipc-ec.png \
-  --profile intl-epc \
-  --out out/EPC-PL --suffix=-PL
+  --project "<tên dự án>" --package "<tên gói thầu>" \
+  --logo-right assets/logo-ipc-ec.png --profile intl-epc --paper a4 \
+  --logo-height 18 --page-number footer --out out/EPC-PL
 ```
+
+| Cờ | Mặc định | Ý nghĩa |
+|:--|:--|:--|
+| `--config` | — | file JSON gói thầu (`project`, `package`, `logo_*`, `paper`, `profile`, `logo_height`, `page_number`) |
+| `--paper` | `a4` | `a4` hoặc `letter` |
+| `--profile` | `keep` | `intl-epc` (áp định dạng bảng/ô) hoặc `keep` |
+| `--logo-height` | `18` | chiều cao logo (mm) |
+| `--page-number` | `footer` | `footer` · `header` · `keep` |
 
 Không truyền `--out` thì sửa tại chỗ và tạo `.bak` bên cạnh.
 

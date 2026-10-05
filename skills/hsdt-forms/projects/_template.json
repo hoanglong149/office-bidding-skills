@@ -1,0 +1,11 @@
+{
+  "_huong_dan": "Copy file này thành projects/<mã-gói>.json rồi điền tên thật của gói thầu. Mỗi gói thầu một file.",
+  "project": "[TÊN DỰ ÁN]",
+  "package": "[TÊN GÓI THẦU]",
+  "logo_left": null,
+  "logo_right": "assets/logo-ipc-ec.png",
+  "paper": "a4",
+  "profile": "intl-epc",
+  "logo_height": 18,
+  "page_number": "footer"
+}

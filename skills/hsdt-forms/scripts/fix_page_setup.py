@@ -138,7 +138,7 @@ def analyze(path: str) -> dict:
         doc = z.read("word/document.xml").decode("utf-8", "ignore")
         parts = " ".join(
             z.read(n).decode("utf-8", "ignore")
-            for n in names if re.match(r"word/(header|footer)\d*\.xml", n))
+            for n in names if re.match(r"word/(header|footer)[A-Za-z0-9_]*\.xml", n))
     hsdt = bool(re.search(r"Mẫu\s*số\s*\d", doc)) or "Bidding Package" in parts
     prob, ok = [], []
 

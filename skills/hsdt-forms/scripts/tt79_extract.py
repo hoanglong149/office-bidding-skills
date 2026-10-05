@@ -201,6 +201,31 @@ def strip_dangling_media_rels(rels_xml: bytes, keep: set[str]) -> bytes:
     return new.encode("utf-8") if new != text else rels_xml
 
 
+def strip_leading_page_break(body) -> int:
+    """Bỏ `<w:br w:type="page"/>` ở đầu biểu mẫu.
+
+    Trong E-HSMT gốc mỗi biểu mẫu mở đầu bằng page break để sang trang; khi tách ra file riêng
+    nó tạo **trang đầu trắng**. Chỉ cắt trong 3 đoạn đầu để không phá page break hợp lệ ở giữa.
+    """
+    removed = 0
+    first = [el for el in list(body)[:3] if el.tag == f"{{{W}}}p"]
+    for el in first:
+        for br in el.findall(f".//{{{W}}}br", NS):
+            if br.get(f"{{{W}}}type") == "page":
+                br.getparent().remove(br); removed += 1
+        for lr in el.findall(f".//{{{W}}}lastRenderedPageBreak", NS):
+            lr.getparent().remove(lr)
+    # đoạn rỗng còn lại ở đầu body thì bỏ
+    for el in list(body):
+        if el.tag != f"{{{W}}}p":
+            break
+        if para_text(el) == "" and el.find(f".//{{{W}}}drawing", NS) is None:
+            body.remove(el)
+        else:
+            break
+    return removed
+
+
 def write_form(src: Source, dst: str, i0: int, i_end: int, keep_media: bool) -> None:
     """Ghi file mới = bản sao nguồn, body chỉ còn [i0, i_end) + sectPr gốc.
 
@@ -211,6 +236,7 @@ def write_form(src: Source, dst: str, i0: int, i_end: int, keep_media: bool) -> 
     for j, (el, _kind, _t) in enumerate(src.blocks):
         if i0 <= j < i_end:
             body.append(copy.deepcopy(el))
+    strip_leading_page_break(body)
     sect = src.sectpr                      # BẮT BUỘC: thiếu sectPr là mất khổ giấy & lề
     if sect is not None:
         body.append(copy.deepcopy(sect))

@@ -105,21 +105,22 @@ Ra: `TT79-M<mã>-<tên>.docx` + `TT79-M<mã>-<tên>.xlsx` (mỗi bảng → 1 sh
 File HSDT thật thường có **letterhead tên dự án / tên gói thầu** ở đầu mỗi trang
 (bảng không viền: nội dung bên trái, logo bên phải) và định dạng bảng/ô riêng của gói.
 
+Mỗi gói thầu một file cấu hình — **không hard-code tên gói vào biểu mẫu**:
+
 ```bash
+cp projects/_template.json projects/<mã-gói>.json     # điền tên thật của gói
 python3 scripts/apply_project_format.py templates/EPC-10A \
-  --project "<tên dự án>" \
-  --package "<tên gói thầu>" \
-  --logo-right assets/logo-ipc-ec.png \
-  --profile intl-epc \
-  --out out/EPC-<mã gói> --suffix=-PL
+  --config projects/<mã-gói>.json --out out/<mã-gói>
 ```
 
-| Profile | Khổ giấy | Bảng / ô |
+| Tuỳ chọn | Mặc định | Ý nghĩa |
 |:--|:--|:--|
-| `keep` (mặc định) | giữ nguyên A4 của E-HSMT mẫu | giữ nguyên |
-| `intl-epc` | US Letter 216 × 279 mm, lề 20/20/30/20 | viền `single` 0,5 pt, `tblLayout=fixed`, ô canh giữa dọc, chữ ô **TNR 13 pt**, hàng tiêu đề đậm + canh giữa |
+| `--paper` | **a4** | `a4` (chuẩn VN) hoặc `letter` |
+| `--profile` | `keep` | `intl-epc`: bảng viền `single` 0,5 pt, `tblLayout=fixed`, ô canh giữa dọc, chữ ô **TNR 13 pt**, hàng tiêu đề đậm + canh giữa |
+| `--logo-height` | `18` mm | chiều cao logo (giữ tỉ lệ ảnh) |
+| `--page-number` | **footer** | số trang ở **chân trang** (header chỉ còn letterhead) · `header` · `keep` |
 
-Letterhead chèn vào `word/header1.xml`; nội dung cũ (field `PAGE`) được giữ lại.
+Letterhead chèn vào `word/header1.xml` (bảng không viền: tên dự án + tên gói thầu, logo bên phải).
 Chi tiết + giá trị XML: `references/format-profiles.md`.
 
 ### 2.3. Chuẩn hoá khổ giấy / lề / font cho file .docx
@@ -141,7 +142,7 @@ python3 scripts/fix_page_setup.py         file.docx     # sửa (tạo .bak)
 | Đầu biểu mẫu | `Mẫu số X (Webform trên Hệ thống)` — căn phải, đậm, 14 pt |
 | Tên biểu mẫu | CHỮ HOA — căn giữa, đậm |
 | Cuối biểu mẫu | `Ghi chú:` + các chú thích (1), (2)… đúng nguyên bản |
-| Số trang | field `PAGE` (đặt ở header hoặc footer tuỳ HSMT) |
+| Số trang | field `PAGE` ở **chân trang**, canh giữa (mặc định khi đóng dấu letterhead) |
 
 Ba lỗi hay gặp khi tự dựng lại mẫu (dẫn tới "in ra không giống"):
 1. `docDefaults` theo **font theme** → run thiếu `rPr` ra Calibri.
