@@ -73,9 +73,9 @@ Tách 32 biểu mẫu mất **< 1 giây** (giữ nguyên 100 % định dạng g�
 
 ### Dùng như skill cho agent
 ```bash
-git clone https://github.com/hoanglong149/hsdt-forms-skill.git
-cp -r hsdt-forms-skill ~/.agents/skills/hsdt-forms        # user-level
-# hoặc: cp -r hsdt-forms-skill <workspace>/.agents/skills/hsdt-forms
+git clone https://github.com/hoanglong149/office-bidding-skills.git
+cp -r office-bidding-skills ~/.agents/skills/hsdt-forms        # user-level
+# hoặc: cp -r office-bidding-skills <workspace>/.agents/skills/hsdt-forms
 ```
 Agent tự đọc `SKILL.md` khi gặp task về HSDT / biểu mẫu dự thầu / TT79.
 
@@ -104,7 +104,7 @@ Chi tiết: [`references/tt79-layout.md`](references/tt79-layout.md) · danh m�
 ## Cấu trúc repo
 
 ```text
-hsdt-forms-skill/
+office-bidding-skills/
 ├── SKILL.md                    # hướng dẫn cho agent
 ├── sources/                    # E-HSMT mẫu chính thức TT79 (EPC, xây lắp, hàng hóa, EC, PC)
 ├── templates/                  # 5 bộ biểu mẫu đã tách (EPC, xây lắp, hàng hóa, EC, PC)

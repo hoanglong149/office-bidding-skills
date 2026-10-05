@@ -17,8 +17,8 @@ và văn phòng theo đúng chuẩn pháp lý Việt Nam:
 ## Cài đặt
 
 ```bash
-git clone https://github.com/hoanglong149/hsdt-forms-skill.git
-cd hsdt-forms-skill
+git clone https://github.com/hoanglong149/office-bidding-skills.git
+cd office-bidding-skills
 
 # cài cả hai (user-level)
 cp -r skills/hsdt-forms skills/nd30-forms ~/.agents/skills/
