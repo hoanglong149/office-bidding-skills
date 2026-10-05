@@ -1,12 +1,13 @@
 # skills - Biểu mẫu & Văn bản (Việt Nam)
 
-Monorepo chứa **2 skill độc lập** cho agent (omp / Claude Code / Cursor), phục vụ công việc đấu thầu
+Monorepo chứa **3 skill độc lập** cho agent (omp / Claude Code / Cursor), phục vụ công việc đấu thầu
 và văn phòng theo đúng chuẩn pháp lý Việt Nam:
 
 | Skill | Chuẩn | Dùng cho |
 |:--|:--|:--|
 | [`skills/hsdt-forms`](skills/hsdt-forms/) | **Thông tư 79/2025/TT-BTC** | Biểu mẫu Hồ sơ dự thầu (E-HSDT): đơn dự thầu, thỏa thuận liên danh, bảo lãnh, nhân sự, thiết bị, tài chính, bảng giá dự thầu... |
 | [`skills/nd30-forms`](skills/nd30-forms/) | **Nghị định 30/2020/NĐ-CP** | Văn bản hành chính & xử lý file văn phòng: công văn, quyết định, tờ trình, báo cáo, biên bản, thông báo... + Word/Excel/Slide/PDF |
+| [`skills/diagram-design`](skills/diagram-design/) | — | Sơ đồ cho thuyết minh/báo cáo: 39 loại biểu đồ HTML/SVG, 5 template EPC, xuất SVG/PNG và chèn thẳng vào file Word |
 
 > Hai chuẩn này **khác nhau về thể thức**, không trộn:
 > HSDT **không có** `Số: .../...`, không có `Hà Nội, ngày ...`, không có khối tiêu đề 2 cột.
@@ -22,8 +23,8 @@ và văn phòng theo đúng chuẩn pháp lý Việt Nam:
 git clone https://github.com/hoanglong149/office-bidding-skills.git
 cd office-bidding-skills
 
-# cả hai skill, mức người dùng
-cp -r skills/hsdt-forms skills/nd30-forms ~/.agents/skills/
+# cả ba skill, mức người dùng
+cp -r skills/hsdt-forms skills/nd30-forms skills/diagram-design ~/.agents/skills/
 
 # hoặc chỉ một skill, hoặc theo từng project
 cp -r skills/hsdt-forms ~/.agents/skills/hsdt-forms
@@ -86,6 +87,12 @@ Nếu không dùng môi trường ảo, cài trực tiếp:
 
 ```bash
 python3 -m pip install --user lxml python-docx openpyxl
+```
+
+Skill `diagram-design` (xuất hình và chèn vào Word) cần Chrome/Chromium trên máy, và:
+
+```bash
+python3 -m pip install --user python-docx
 ```
 
 Skill `nd30-forms` (tạo/sửa Word, Excel, Slide, chuyển đổi PDF):
@@ -186,6 +193,30 @@ cd skills/nd30-forms
 python3 scripts/office/unpack.py file.docx ./work      # bung để sửa XML
 python3 scripts/office/pack.py  ./work file-moi.docx   # đóng gói lại
 ```
+
+---
+
+## 3. `diagram-design` - Sơ đồ cho thuyết minh
+
+Sơ đồ HTML/SVG tự bố cục (không auto-layout như mermaid), xuất SVG/PNG và chèn thẳng vào Word.
+
+```bash
+cd skills/diagram-design
+bash scripts/vao-thuyet-minh.sh ./hinh "Thuyet minh.docx"        # chèn vào bài có sẵn
+bash scripts/vao-thuyet-minh.sh ./hinh "Thuyet minh.docx" --new  # tạo bài mới
+```
+
+| Thành phần | Nội dung |
+|:--|:--|
+| `templates-epc/` | 5 template: kiến trúc hệ thống, quy trình, Gantt, cơ cấu tổ chức, luồng dữ liệu |
+| `references/` | 39 loại biểu đồ + đặc tả xuất file, import từ mermaid/draw.io |
+| `assets/` | Bộ ví dụ để đối chiếu |
+| `scripts/figdoc.py` | Tách `<svg>`, render PNG bằng Chrome headless, chèn vào `.docx` kèm chú thích |
+| `scripts/vao-thuyet-minh.sh` | Một lệnh cho người không quen kỹ thuật |
+| `scripts/self_check.py` | Kiểm hợp đồng SVG/HTML của một sơ đồ |
+
+Trạng thái: đã render 5 template và chèn Word; **chưa dùng thật cho một thuyết minh nộp thầu**.
+Nguồn gốc (MIT, bản gốc `cathrynlavery/diagram-design`): [NOTICE.md](skills/diagram-design/NOTICE.md).
 
 ---
 
