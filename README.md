@@ -21,32 +21,68 @@ Repo này giải cả 3: sinh sẵn bộ biểu mẫu đúng chuẩn, đúng vai
 
 ---
 
+## Bộ file có sẵn — dùng ngay, không cần cài gì
+
+```text
+templates/          ← 22 file đã sinh sẵn, đúng định dạng NĐ30
+├── HSDT-F01 … F19b   (11 .docx)
+└── HSDT-F06A … F23   (11 .xlsx / 28 sheet)
+demo_output/        ← bộ demo thành phẩm: đã điền letterhead + dữ liệu mẫu
+examples/preview/   ← ảnh render để xem trước
+```
+
+Copy `templates/*` vào thư mục gói thầu là dùng được luôn.
+Muốn xem thành phẩm trước khi dùng: mở `demo_output/`.
+
+---
+
+## Hình ảnh thực tế
+
+| Form 01 — Đơn dự thầu (kỹ thuật) | Form 19(a) — Đơn dự thầu (tài chính) |
+|:--|:--|
+| ![Form 01](examples/preview/HSDT-F01-Letter-of-Bid-Technical.png) | ![Form 19a](examples/preview/HSDT-F19a-Letter-of-Bid-Financial.png) |
+
+| Form 17(a) — Xác nhận của Chủ đầu tư | Form 20 — Grand Summary (Excel) |
+|:--|:--|
+| ![Form 17a](examples/preview/HSDT-F17a-Employer-Certificate.png) | ![Form 20](examples/preview/HSDT-F20-F23-Bieu-gia.png) |
+
+*(ảnh sinh từ `demo_output/`, letterhead của gói thầu giả định)*
+
+---
+
 ## Cài đặt
 
 ### Yêu cầu
-- Python 3.9+
-- `pip install python-docx openpyxl`
+- **Không cần gì** nếu chỉ dùng `templates/`.
+- Python 3.9+ và `pip install -r requirements.txt` nếu muốn sinh lại / tuỳ biến / điền dữ liệu tự động.
 
 ### Dùng như skill (agent)
 ```bash
-# omp: copy vào thư mục skill của project hoặc user
-git clone https://github.com/<user>/hsdt-forms-skill.git
+git clone https://github.com/hoanglong149/hsdt-forms-skill.git
 cp -r hsdt-forms-skill ~/.agents/skills/hsdt-forms        # user-level
 # hoặc: cp -r hsdt-forms-skill <workspace>/.agents/skills/hsdt-forms   # project-level
 ```
-Agent sẽ tự đọc `SKILL.md` khi gặp task về HSDT / biểu mẫu dự thầu / lỗi format `.docx`.
+Agent tự đọc `SKILL.md` khi gặp task về HSDT / biểu mẫu dự thầu / lỗi format `.docx`.
 
 ### Dùng như CLI
 ```bash
-python3 scripts/build_word.py  [thư_mục_đích]     # 11 biểu mẫu Word
-python3 scripts/build_excel.py [thư_mục_đích]     # 11 workbook Excel
-bash    scripts/build_all.sh   [thư_mục_đích]     # cả hai + tự kiểm tra
+bash    scripts/build_all.sh   [thư_mục_đích]     # 11 Word + 11 Excel + tự kiểm tra
+python3 scripts/build_word.py  [thư_mục_đích]
+python3 scripts/build_excel.py [thư_mục_đích]
 
-python3 scripts/fix_nd30.py --check file.docx     # chỉ kiểm tra lỗi định dạng
+# Điền letterhead/ngày/số hồ sơ cho cả bộ (docx + xlsx)
+python3 scripts/fill_letterhead.py <thư_mục> \
+  --bidder "CÔNG TY ABC" --employer "BAN QLDA XYZ" \
+  --place "Hà Nội" --doc-no "05/2026-HSDT" --date "ngày 05 tháng 10 năm 2026"
+
+python3 scripts/fix_nd30.py --check file.docx     # kiểm tra lỗi định dạng
 python3 scripts/fix_nd30.py         file.docx     # tự sửa (tạo file.docx.bak)
+
+# Demo end-to-end (dùng gói thầu giả định, không cần dữ liệu thật)
+python3 examples/demo_project.py demo_output
 ```
 
-Mặc định ghi ra `./hsdt_forms` (hoặc `$HSDT_OUT` nếu đặt biến môi trường).
+Mặc định ghi ra `./hsdt_forms` (hoặc `$HSDT_OUT`).
 
 ---
 
@@ -113,9 +149,15 @@ hsdt-forms-skill/
 ├── SKILL.md                    # hướng dẫn cho agent (when to use / workflow / rules)
 ├── README.md
 ├── LICENSE                     # MIT
+├── templates/                  # 22 file sinh sẵn — copy dùng ngay
+├── demo_output/                # bộ demo thành phẩm
+├── examples/
+│   ├── demo_project.py         # demo end-to-end
+│   └── preview/*.png           # ảnh render
 ├── scripts/
 │   ├── build_word.py           # sinh 11 biểu mẫu Word
 │   ├── build_excel.py          # sinh 11 workbook Excel
+│   ├── fill_letterhead.py      # điền letterhead vào .docx + .xlsx
 │   ├── fix_nd30.py             # kiểm tra & chuẩn hoá .docx theo NĐ30
 │   └── build_all.sh
 └── references/

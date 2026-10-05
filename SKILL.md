@@ -7,8 +7,9 @@ description: >
   "deviation form", "grand summary", "price schedule", "letterhead theo gói thầu".
   Cũng dùng khi cần chuẩn hoá định dạng .docx theo Nghị định 30/2020/NĐ-CP
   ("in ra không giống format", "lỗi font", "thiếu số trang", "lệch lề", "rớt dòng tiêu đề").
-  Sinh 11 biểu mẫu Word + 11 workbook Excel (28 sheet, phủ 26 form danh mục & biểu giá),
-  tự động đúng định dạng NĐ30 và cấu trúc cột theo HSMT gốc.
+  Bộ đã sinh sẵn: `templates/` gồm 11 file Word + 11 workbook Excel (28 sheet, phủ 26 form
+  danh mục & biểu giá) — copy dùng ngay, không cần cài Python.
+  `examples/demo_project.py` sinh bộ demo hoàn chỉnh để đối chiếu.
   NOT for: soạn thảo công văn/tờ trình hành chính thường ngày (dùng template ND30 riêng),
   bóc khối lượng/BOQ kỹ thuật (dùng skill BOQ), hay đọc HSMT để tóm tắt điều khoản.
 date: 2026-10-05
@@ -38,6 +39,19 @@ tags: [skill, hsdt, dau-thau, docx, xlsx, nd30, bidding-form, ipc]
 
 ## 2. Chạy nhanh
 
+### 2.0. Cách nhanh nhất — dùng template có sẵn (không cần Python)
+
+```text
+templates/                     ← 22 file đã sinh sẵn, đúng định dạng NĐ30
+├── HSDT-F01-Letter-of-Bid-Technical.docx      … 11 file Word
+└── HSDT-F20-F23-Bieu-gia.xlsx                 … 11 workbook Excel (28 sheet)
+```
+
+Copy `templates/*` ra thư mục gói thầu là dùng được ngay.
+Muốn xem **bộ thành phẩm trông thế nào**: mở `demo_output/` hoặc xem ảnh trong `examples/preview/`.
+
+### 2.1. Sinh lại / tuỳ biến bằng script
+
 ```bash
 SK="$(dirname "$(readlink -f "$0")")"   # thư mục skill
 bash "$SK/scripts/build_all.sh"                         # sinh lại toàn bộ Word + Excel
@@ -45,10 +59,21 @@ python3 "$SK/scripts/build_word.py"  [thư_mục_đích]     # chỉ Word (11 fi
 python3 "$SK/scripts/build_excel.py" [thư_mục_đích]     # chỉ Excel (11 workbook)
 python3 "$SK/scripts/fix_nd30.py" --check  <file.docx>  # kiểm tra định dạng 1 file
 python3 "$SK/scripts/fix_nd30.py"          <file.docx>  # tự chuẩn hoá (tạo .bak)
+python3 "$SK/scripts/fill_letterhead.py" <thư_mục> --bidder "..." --employer "..." \
+        --place "Hà Nội" --doc-no "05/2026-HSDT" --date "ngày 05 tháng 10 năm 2026"
 ```
 
 Mặc định ghi ra `./hsdt_forms` (hoặc `$HSDT_OUT`). Khi làm gói thầu cụ thể:
-**copy ra thư mục gói thầu rồi mới sửa** — không sửa trực tiếp trong `Templates`.
+**copy ra thư mục gói thầu rồi mới sửa** — không sửa trực tiếp trong `templates/`.
+
+### 2.2. Demo end-to-end
+
+```bash
+python3 "$SK/examples/demo_project.py" [thư_mục_output]
+```
+
+Lấy `templates/` → điền letterhead gói giả định → chèn dữ liệu thiết bị mẫu → xuất bộ hoàn chỉnh.
+Dùng để học pipeline hoặc để kiểm tra môi trường mới cài.
 
 ---
 
@@ -120,6 +145,19 @@ Bảng ánh xạ đầy đủ form ↔ file ↔ HSMT reference: `references/form
 ```text
 hsdt-forms-skill/
 ├── SKILL.md
-├── scripts/{build_word.py, build_excel.py, fix_nd30.py, build_all.sh}
+├── templates/                  # 22 file đã sinh sẵn — copy dùng ngay
+├── demo_output/                # bộ demo thành phẩm (letterhead + dữ liệu mẫu)
+├── examples/
+│   ├── demo_project.py         # script demo end-to-end
+│   └── preview/*.png           # ảnh render của bộ demo
+├── scripts/
+│   ├── build_word.py           # sinh 11 Word   ← nguồn chính
+│   ├── build_excel.py          # sinh 11 Excel  ← nguồn chính
+│   ├── fill_letterhead.py      # điền letterhead/ngày/số hồ sơ vào .docx + .xlsx
+│   ├── fix_nd30.py             # kiểm tra & tự chuẩn hoá .docx
+│   └── build_all.sh
 └── references/{nd30-format.md, form-index.md}
 ```
+
+Sửa nội dung biểu mẫu ⇒ sửa `scripts/build_word.py` / `build_excel.py` rồi chạy lại
+`build_all.sh` + copy kết quả vào `templates/` (giữ 2 nơi khớp nhau).

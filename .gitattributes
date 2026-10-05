@@ -1,0 +1,4 @@
+# Binary template files — không auto-merge, không diff text
+*.docx binary
+*.xlsx binary
+*.png  binary
