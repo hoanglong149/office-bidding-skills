@@ -195,41 +195,41 @@ def insert_into_docx(docx_path: str, figures: list[tuple[str, str]], width_cm: f
             raise SystemExit(f"Không thấy file Word: {docx_path} (thêm --new để tạo mới)")
         doc = Document(docx_path)
 
-    start_no = next_figure_number(doc)
+    # Thứ tự đánh số phải theo VỊ TRÍ trong bài, không theo thứ tự file đầu vào.
+    ordered = []
+    used = set()
+    for p in doc.paragraphs:
+        for idx, (png, caption) in enumerate(figures):
+            marker = f"[[FIG:{os.path.splitext(os.path.basename(png))[0]}]]"
+            if idx not in used and marker in p.text:
+                ordered.append((idx, p))
+                used.add(idx)
+    tail = [i for i in range(len(figures)) if i not in used]
 
-    for idx, (png, caption) in enumerate(figures):
-        no = start_no + idx
+    start_no = next_figure_number(doc)
+    seq = ordered + [(i, None) for i in tail]
+
+    for n, (idx, par) in enumerate(seq):
+        png, caption = figures[idx]
+        no = start_no + n
         marker = f"[[FIG:{os.path.splitext(os.path.basename(png))[0]}]]"
 
-        def add_figure(par):
-            par.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            par.add_run().add_picture(png, width=Cm(width_cm))
-
-        # chèn tại dòng đánh dấu, nếu không có thì thêm vào cuối
-        target = None
-        for p in doc.paragraphs:
-            if marker in p.text:
-                target = p
-                break
-        if target is not None:
-            for r in list(target.runs):
-                if marker in r.text:
-                    r.text = r.text.replace(marker, "")
-            add_figure(target)
-            cap = doc.add_paragraph()
-            cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            run = cap.add_run(f"Hình {no}. {caption}")
-            run.italic = True
-            run.font.size = Pt(12)
-            target._p.addnext(cap._p)
-        else:
+        if par is None:                      # không có đánh dấu: thêm vào cuối bài
             par = doc.add_paragraph()
-            add_figure(par)
-            cap = doc.add_paragraph()
-            cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            run = cap.add_run(f"Hình {no}. {caption}")
-            run.italic = True
-            run.font.size = Pt(12)
+        else:
+            for r in list(par.runs):
+                r.text = r.text.replace(marker, "")
+
+        par.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        par.add_run().add_picture(png, width=Cm(width_cm))
+
+        cap = doc.add_paragraph()
+        cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = cap.add_run(f"Hình {no}. {caption}")
+        run.italic = True
+        run.font.size = Pt(12)
+        if par is not None and par._p.getparent() is not None:
+            par._p.addnext(cap._p)
 
     doc.save(docx_path)
 
