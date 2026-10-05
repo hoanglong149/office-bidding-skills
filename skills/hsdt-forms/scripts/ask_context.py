@@ -2,23 +2,23 @@
 """
 ask_context.py — Quy trình HỎI LẠI ngữ cảnh trước khi sinh hồ sơ HSDT.
 
-Skill không tự bịa thông tin gói thầu. Trước khi chạy, phải có đủ ngữ cảnh bắt buộc;
-thiếu thì phải hỏi lại người dùng.
+Skill không tự bịa thông tin gói thầu. Phải có đủ ngữ cảnh bắt buộc trước khi chạy;
+thiếu thì hỏi lại người dùng.
 
 Ba chế độ:
 
-  1) In câu hỏi ra màn hình (để agent hỏi trong chat)
+  1) In câu hỏi ra màn hình, để agent hỏi trong chat
         python3 ask_context.py
 
-  2) Xuất PHIẾU để người dùng điền (không cần biết kỹ thuật)
+  2) Xuất phiếu để người dùng điền, không cần biết kỹ thuật
         python3 ask_context.py --form phieu-ngu-can.md
-        #  → mở file bằng Word/Notepad, điền sau chữ "Trả lời:"
+        #  mở file bằng Word hoặc Notepad, điền sau chữ "Trả lời:"
 
-  3) Kiểm phiếu đã điền — thiếu mục bắt buộc thì DỪNG và nói rõ còn thiếu gì
+  3) Kiểm phiếu đã điền: thiếu mục bắt buộc thì dừng và liệt kê còn thiếu gì
         python3 ask_context.py --check phieu-ngu-can.md
-        #  → exit 0 nếu đủ, exit 1 nếu còn thiếu (in danh sách thiếu)
+        #  exit 0 nếu đủ, exit 1 nếu còn thiếu (in danh sách thiếu)
 
-Bảng câu hỏi nằm ở `references/required-inputs.json` (một nguồn duy nhất).
+Bảng câu hỏi nằm ở `references/required-inputs.json`; sửa câu hỏi thì sửa ở đó.
 """
 
 from __future__ import annotations
@@ -54,7 +54,7 @@ def print_questions(data: dict) -> None:
             mark = " (*BẮT BUỘC)" if it.get("blocking") else ""
             print(f"  [{it['id']}]{mark} {it['question']}")
             if it.get("where"):
-                print(f"        ↳ lấy ở: {it['where']}")
+                print(f"        nguồn: {it['where']}")
     nb = sum(1 for _, it in all_items(data) if it.get("blocking"))
     print(f"\nTổng: {sum(1 for _ in all_items(data))} mục — trong đó {nb} mục BẮT BUỘC.")
 
@@ -82,7 +82,7 @@ def write_form(data: dict, path: str) -> None:
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(L))
     print(f"Đã tạo phiếu: {path}")
-    print("→ Mở bằng Word/Notepad, điền sau chữ 'Trả lời:', lưu lại rồi chạy --check.")
+    print("Mở bằng Word hoặc Notepad, điền sau chữ 'Trả lời:', lưu lại rồi chạy --check.")
 
 
 # ------------------------------------------------------------------ 3. kiểm phiếu
@@ -97,7 +97,7 @@ def parse_answers(path: str) -> dict[str, str]:
             continue
         key = m.group(1)
         v = ""
-        mv = re.search(r"Trả lời:[ \t]*(.*)", b)   # \s* sẽ ăn cả dòng mới → lọt heading nhóm sau
+        mv = re.search(r"Trả lời:[ \t]*(.*)", b)   # \s* sẽ ăn cả dòng mới, làm lọt heading nhóm sau
         if mv:
             v = mv.group(1).strip()
             # nếu câu trả lời nằm ở dòng dưới, gom các dòng tiếp theo tới dòng trống thứ hai
@@ -123,15 +123,15 @@ def check_answers(data: dict, path: str) -> int:
             done += 1
     print(f"Phiếu: {os.path.basename(path)} — đã trả lời {done} mục")
     if missing:
-        print(f"\n❌ CÒN THIẾU {len(missing)} MỤC BẮT BUỘC — chưa sinh hồ sơ được:\n")
+        print(f"\nTHIẾU {len(missing)} MỤC BẮT BUỘC. Chưa sinh hồ sơ được.\n")
         for gid, iid, q, where in missing:
             print(f"  [{gid}·{iid}] {q}")
             if where:
-                print(f"          ↳ lấy ở: {where}")
-        print("\n→ Bổ sung các mục trên vào phiếu rồi chạy lại. "
+                print(f"          nguồn: {where}")
+        print("\nBổ sung các mục trên vào phiếu rồi chạy lại. "
               "Không tự đoán/không bịa số.")
         return 1
-    print("\n✅ Đủ ngữ cảnh bắt buộc — được phép chạy bước sinh hồ sơ.")
+    print("\nĐủ ngữ cảnh bắt buộc. Được phép chạy bước sinh hồ sơ.")
     return 0
 
 
@@ -151,4 +151,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except BrokenPipeError:          # vd `... | head` đóng ống sớm
+        os._exit(0)

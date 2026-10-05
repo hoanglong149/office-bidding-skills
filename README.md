@@ -5,11 +5,11 @@ và văn phòng theo đúng chuẩn pháp lý Việt Nam:
 
 | Skill | Chuẩn | Dùng cho |
 |:--|:--|:--|
-| [`skills/hsdt-forms`](skills/hsdt-forms/) | **Thông tư 79/2025/TT-BTC** | Biểu mẫu Hồ sơ dự thầu (E-HSDT): đơn dự thầu, thỏa thuận liên danh, bảo lãnh, nhân sự, thiết bị, tài chính, bảng giá dự thầu… |
-| [`skills/nd30-forms`](skills/nd30-forms/) | **Nghị định 30/2020/NĐ-CP** | Văn bản hành chính & xử lý file văn phòng: công văn, quyết định, tờ trình, báo cáo, biên bản, thông báo… + Word/Excel/Slide/PDF |
+| [`skills/hsdt-forms`](skills/hsdt-forms/) | **Thông tư 79/2025/TT-BTC** | Biểu mẫu Hồ sơ dự thầu (E-HSDT): đơn dự thầu, thỏa thuận liên danh, bảo lãnh, nhân sự, thiết bị, tài chính, bảng giá dự thầu... |
+| [`skills/nd30-forms`](skills/nd30-forms/) | **Nghị định 30/2020/NĐ-CP** | Văn bản hành chính & xử lý file văn phòng: công văn, quyết định, tờ trình, báo cáo, biên bản, thông báo... + Word/Excel/Slide/PDF |
 
 > Hai chuẩn này **khác nhau về thể thức** — không trộn:
-> HSDT **không có** `Số: …/…`, không có `Hà Nội, ngày …`, không có khối tiêu đề 2 cột.
+> HSDT **không có** `Số: .../...`, không có `Hà Nội, ngày ...`, không có khối tiêu đề 2 cột.
 > Văn bản hành chính thì **bắt buộc** có.
 
 ---
@@ -53,11 +53,11 @@ giữ 100 % định dạng gốc; kèm công cụ tách cho mọi loại gói th
 **Người không rành kỹ thuật — 1 lệnh:**
 
 ```bash
-cd skills/hsdt-forms && bash lam-ho-so.sh     # hỏi từng câu → ra bộ hồ sơ, mở thư mục kết quả
+cd skills/hsdt-forms && bash lam-ho-so.sh     # hỏi từng câu: ra bộ hồ sơ, mở thư mục kết quả
 ```
 
 Thiếu ngữ cảnh thì skill **hỏi lại**, không tự bịa:
-`python3 scripts/ask_context.py --form phieu-ngu-can.md` → điền → `--check phieu-ngu-can.md`.
+`python3 scripts/ask_context.py --form phieu-ngu-can.md`: điền: `--check phieu-ngu-can.md`.
 
 ```bash
 python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx out/xay-lap

@@ -53,8 +53,8 @@ header chỉ còn letterhead, chân trang có số trang canh giữa. Giá trị
 Logo: mặc định cao **18 mm**, giữ đúng tỉ lệ ảnh, đổi bằng `--logo-height` (mm).
 
 Điểm bắt buộc: file phải **tham chiếu** header trong `w:sectPr`
-(`<w:headerReference w:type="default" r:id="…"/>`). Nhiều file tách từ E-HSMT có part
-`word/header1.xml` nhưng không có reference → script tự thêm.
+(`<w:headerReference w:type="default" r:id="..."/>`). Nhiều file tách từ E-HSMT có part
+`word/header1.xml` nhưng không có reference: script tự thêm.
 
 ---
 
@@ -96,16 +96,16 @@ Sau khi áp dụng, kiểm tra lại:
 python3 scripts/fix_page_setup.py --check out/EPC-PL/*.docx
 ```
 
-Checker tự nhận biết biểu mẫu HSDT (`Mẫu số …`): số trang có thể nằm ở header **hoặc** footer,
+Checker tự nhận biết biểu mẫu HSDT (`Mẫu số ...`): số trang có thể nằm ở header **hoặc** footer,
 không bắt buộc `pPrDefault` dày như văn bản hành chính.
 
 ---
 
 ## 4. Khuôn mẫu hoá cho gói khác
 
-1. Mở **Chương IV** của E-HSMT thực tế, xem đầu biểu mẫu (`Mẫu số … (Webform trên Hệ thống)`),
+1. Mở **Chương IV** của E-HSMT thực tế, xem đầu biểu mẫu (`Mẫu số ... (Webform trên Hệ thống)`),
    khổ giấy, lề, cỡ chữ trong bảng, và vị trí số trang.
 2. Ghi lại thành một profile mới trong file này (bảng như §2).
-3. Nếu chỉ khác letterhead → dùng ngay `apply_project_format.py --profile keep`.
-4. Nếu khác cả định dạng bảng/trang → bổ sung một nhánh trong `apply_profile()` của script
+3. Nếu chỉ khác letterhead: dùng ngay `apply_project_format.py --profile keep`.
+4. Nếu khác cả định dạng bảng/trang: bổ sung một nhánh trong `apply_profile()` của script
    (mỗi profile là một khối rõ ràng, không trộn điều kiện).

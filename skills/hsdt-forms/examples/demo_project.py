@@ -92,7 +92,7 @@ def main() -> None:
         if f.endswith((".docx", ".xlsx", ".md")):
             shutil.copy2(os.path.join(TEMPLATES, f), os.path.join(out, f))
             n += 1
-    print(f"1/2  Đã chép {n} biểu mẫu TT79 → {out}")
+    print(f"1/2  Đã chép {n} biểu mẫu TT79: {out}")
 
     filled = 0
     for name, fn in TARGETS.items():

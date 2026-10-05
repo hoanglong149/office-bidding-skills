@@ -16,15 +16,15 @@ tags: [skill, hsdt, dau-thau, tt79, muasamcong, docx, xlsx, e-hsmt]
 
 # HSDT Forms — Biểu mẫu Hồ sơ dự thầu theo **TT 79/2025/TT-BTC**
 
-> **Dùng khi**: lập E-HSDT gói thầu EPC / xây lắp / hàng hóa / EP / EC / PC / tư vấn,
+> Dùng khi: lập E-HSDT gói thầu EPC / xây lắp / hàng hóa / EP / EC / PC / tư vấn,
 > cần đúng biểu mẫu và đúng định dạng do Bộ Tài chính ban hành.
-> **KHÔNG dùng khi**: soạn văn bản hành chính (công văn, tờ trình…) — thể thức NĐ30 khác hẳn.
+> **KHÔNG dùng khi**: soạn văn bản hành chính (công văn, tờ trình...) — thể thức NĐ30 khác hẳn.
 
 ---
 
-## 0. Quy trình bắt buộc — kiểm & HỎI LẠI ngữ cảnh trước khi làm
+## 0. Kiểm ngữ cảnh trước khi làm
 
-Skill **không tự bịa** thông tin gói thầu. Trước khi sinh hồ sơ, phải có đủ ngữ cảnh:
+Skill không tự bịa thông tin gói thầu. Phải có đủ ngữ cảnh trước khi sinh hồ sơ:
 
 ```bash
 python3 scripts/ask_context.py                       # in câu hỏi (để hỏi trong chat)
@@ -32,18 +32,18 @@ python3 scripts/ask_context.py --form phieu.md       # xuất PHIẾU cho ngư�
 python3 scripts/ask_context.py --check phieu.md      # kiểm: thiếu mục (*) thì DỪNG (exit 1)
 ```
 
-**Luật cứng:**
+Quy tắc:
 
-1. Chưa `✅ Đủ ngữ cảnh bắt buộc` thì **KHÔNG** chạy `tt79_extract.py` / `apply_project_format.py`.
-2. Thiếu thông tin ⇒ **hỏi lại người dùng**, không suy đoán, không lấy ví dụ cho có.
-3. **NEVER** tự bịa: tên dự án / tên gói thầu, giá dự thầu, nhân sự, số liệu tài chính, ngày tháng,
-   giá trị bảo đảm dự thầu. Không có nguồn ⇒ ghi `[……]` và nêu rõ đang thiếu.
-4. Hỏi theo lô, mỗi câu có ngữ cảnh "lấy ở đâu" (bảng câu hỏi đã ghi sẵn).
-5. Người dùng **không rành kỹ thuật** ⇒ đưa `--form` để họ điền bằng Word/Notepad rồi `--check`,
-   hoặc bảo họ chạy `bash lam-ho-so.sh` (hỏi từng câu, tự sinh hồ sơ).
+1. Chưa có dòng `Đủ ngữ cảnh bắt buộc` thì chưa chạy `tt79_extract.py` / `apply_project_format.py`.
+2. Thiếu thông tin thì hỏi lại người dùng. Không suy đoán, không lấy ví dụ cho có.
+3. Không tự bịa tên dự án, tên gói thầu, giá dự thầu, nhân sự, số liệu tài chính, ngày tháng,
+   giá trị bảo đảm dự thầu. Không có nguồn thì ghi `[......]` và nêu rõ đang thiếu.
+4. Hỏi theo lô; mỗi câu đã ghi sẵn nguồn cần lấy.
+5. Người dùng không quen kỹ thuật: đưa `--form` để họ điền bằng Word hoặc Notepad rồi `--check`,
+   hoặc bảo họ chạy `bash lam-ho-so.sh`.
 
-Danh sách ngữ cảnh: `references/required-inputs.json` (nguồn duy nhất) ·
-giải thích cho người dùng: `references/inputs-checklist.md`.
+Bảng câu hỏi: `references/required-inputs.json`. Giải thích cho người dùng:
+`references/inputs-checklist.md`.
 
 ---
 
@@ -52,12 +52,12 @@ giải thích cho người dùng: `references/inputs-checklist.md`.
 | | **HSDT (skill này)** | Văn bản hành chính |
 |:--|:--|:--|
 | Chuẩn | **TT 79/2025/TT-BTC** ngày 04/8/2025 | NĐ 30/2020/NĐ-CP |
-| Mẫu | `Mẫu số 02`, `Mẫu số 10A`… (Chương IV E-HSMT) | Quốc hiệu, tên loại văn bản, ký hiệu |
-| Đầu trang | **`Mẫu số X (Webform trên Hệ thống)`** — phải, đậm, 14 pt | Khối tiêu đề 2 cột + `Số: …/…` |
+| Mẫu | `Mẫu số 02`, `Mẫu số 10A`... (Chương IV E-HSMT) | Quốc hiệu, tên loại văn bản, ký hiệu |
+| Đầu trang | **`Mẫu số X (Webform trên Hệ thống)`** — phải, đậm, 14 pt | Khối tiêu đề 2 cột + `Số: .../...` |
 | Nơi nhận / địa danh–ngày | **KHÔNG có** | Có |
 | Khổ giấy / lề / font | A4 · 20-20-**30**-20 mm · Times New Roman **14 pt** | giống |
 
-**NEVER** gắn khối tiêu đề kiểu công văn (Số: …/…-HSDT, "Hà Nội, ngày …") vào biểu mẫu HSDT,
+**NEVER** gắn khối tiêu đề kiểu công văn (Số: .../...-HSDT, "Hà Nội, ngày ...") vào biểu mẫu HSDT,
 **NEVER** đặt "Nơi nhận", "Kính gửi" theo thể thức hành chính vào các mẫu 05–13.
 
 ### Căn cứ pháp lý
@@ -100,10 +100,10 @@ Mỗi bộ: `TT79-M02.docx` (Word: in/ký/scan) · `TT79-M06A.xlsx` (Excel: bả
 
 ## 3. Chạy nhanh
 
-### 3.0. Người không rành kỹ thuật — một lệnh, hỏi từng câu
+### 3.0. Người không quen kỹ thuật: chạy một lệnh
 
 ```bash
-bash lam-ho-so.sh      # hỏi mã gói, loại gói, tên dự án/gói, logo, khổ giấy → ra bộ hồ sơ
+bash lam-ho-so.sh      # hỏi mã gói, loại gói, tên dự án/gói, logo, khổ giấy: ra bộ hồ sơ
 ```
 
 ### 3.0b. Dùng ngay bộ có sẵn (không cần Python)
@@ -129,7 +129,7 @@ python3 scripts/tt79_extract.py sources/TT79-M10A-E-HSMT-EPC-01-tui.docx out --o
 python3 scripts/tt79_extract.py <E-HSMT.docx> out --no-excel        # chỉ Word
 ```
 
-Ra: `TT79-M<mã>-<tên>.docx` + `TT79-M<mã>-<tên>.xlsx` (mỗi bảng → 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
+Ra: `TT79-M<mã>-<tên>.docx` + `TT79-M<mã>-<tên>.xlsx` (mỗi bảng: 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
 
 ### 3.2. Đóng dấu letterhead dự án + áp định dạng gói thầu
 
@@ -176,13 +176,13 @@ python3 scripts/fix_page_setup.py         file.docx     # sửa (tạo .bak)
 | Cỡ chữ | **14 pt** (đúng như E-HSMT mẫu) |
 | Đầu biểu mẫu | `Mẫu số X (Webform trên Hệ thống)` — căn phải, đậm, 14 pt |
 | Tên biểu mẫu | CHỮ HOA — căn giữa, đậm |
-| Cuối biểu mẫu | `Ghi chú:` + các chú thích (1), (2)… đúng nguyên bản |
+| Cuối biểu mẫu | `Ghi chú:` + các chú thích (1), (2)... đúng nguyên bản |
 | Số trang | field `PAGE` ở **chân trang**, canh giữa (mặc định khi đóng dấu letterhead) |
 
 Ba lỗi hay gặp khi tự dựng lại mẫu (dẫn tới "in ra không giống"):
-1. `docDefaults` theo **font theme** → run thiếu `rPr` ra Calibri.
-2. Thiếu style `Normal` / `pPrDefault` → Word tự chế cỡ chữ, dãn dòng.
-3. Thiếu footer → mất số trang; bảng để `autofit` → co cột, rớt dòng tiêu đề.
+1. `docDefaults` theo **font theme**: run thiếu `rPr` ra Calibri.
+2. Thiếu style `Normal` / `pPrDefault`: Word tự chế cỡ chữ, dãn dòng.
+3. Thiếu footer: mất số trang; bảng để `autofit`: co cột, rớt dòng tiêu đề.
 
 Dùng `fix_page_setup.py` để xử lý; **không sửa tay từng file**.
 
@@ -219,7 +219,7 @@ Bảng chi tiết + tên file: `templates/<bộ>/DANH-MUC-BIEU-MAU.md`; danh m�
 Mẫu **04A/04B (bảo lãnh dự thầu)** không đóng gói — TT79 đánh dấu *Scan đính kèm*: bảo lãnh do
 tổ chức tín dụng phát hành theo mẫu của họ.
 
-Số mẫu khác nhau giữa các loại gói (EPC 32 · xây lắp 25 · hàng hóa 32 · EC 26 · PC 35) — gói xây lắp không có mẫu 05A2/05A3, gói hàng hóa không có 05A1/05A3…
+Số mẫu khác nhau giữa các loại gói (EPC 32 · xây lắp 25 · hàng hóa 32 · EC 26 · PC 35) — gói xây lắp không có mẫu 05A2/05A3, gói hàng hóa không có 05A1/05A3...
 
 ---
 
@@ -243,7 +243,7 @@ hsdt-forms/
 ├── sources/                 # E-HSMT mẫu chính thức (TT79/2025/TT-BTC)
 ├── templates/               # 5 bộ biểu mẫu đã tách (EPC, xây lắp, hàng hóa, EC, PC)
 ├── examples/demo_project.py # điền dữ liệu mẫu vào vài bảng để xem trước
-├── lam-ho-so.sh             # chạy 1 lệnh: hỏi ngữ cảnh → sinh hồ sơ (cho người không rành)
+├── lam-ho-so.sh             # chạy 1 lệnh: hỏi ngữ cảnh: sinh hồ sơ (cho người không rành)
 ├── scripts/
 │   ├── ask_context.py             # hỏi lại ngữ cảnh / xuất phiếu / kiểm phiếu
 │   ├── tt79_extract.py            # tách biểu mẫu từ E-HSMT mẫu       ← công cụ chính

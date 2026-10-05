@@ -29,7 +29,7 @@ Hệ thống mạng đấu thầu quốc gia: https://muasamcong.mof.gov.vn
 | 12A–12G | Chào giá trực tuyến | theo quy trình |
 | 13 | Mua sắm trực tuyến | — |
 | 14A–14D | Mẫu báo cáo đánh giá E-HSDT | theo quy trình |
-| Phụ lục 1A–9 | Tờ trình, quyết định, biên bản, bản cam kết… | — |
+| Phụ lục 1A–9 | Tờ trình, quyết định, biên bản, bản cam kết... | — |
 
 Mỗi E-HSMT mẫu gồm 3 phần: **Phần 1** Thủ tục đấu thầu (Chương I–IV) · **Phần 2** Yêu cầu về gói thầu
 (Chương V) · **Phần 3** Điều kiện hợp đồng và biểu mẫu hợp đồng (Chương VI–VIII).

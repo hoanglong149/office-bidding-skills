@@ -3,8 +3,8 @@
 Bộ **biểu mẫu Hồ sơ dự thầu (HSDT / E-HSDT)** đúng chuẩn **Thông tư 79/2025/TT-BTC** — tách nguyên trạng
 từ E-HSMT mẫu do Bộ Tài chính ban hành, kèm công cụ tách biểu mẫu cho **mọi loại gói thầu**.
 
-> ⚠️ **Không phải biểu mẫu NĐ 30**. HSDT không dùng thể thức văn bản hành chính:
-> không có `Số: …/…-HSDT`, không có `Hà Nội, ngày …`, không có khối tiêu đề 2 cột.
+> **Không phải biểu mẫu NĐ 30**. HSDT không dùng thể thức văn bản hành chính:
+> không có `Số: .../...-HSDT`, không có `Hà Nội, ngày ...`, không có khối tiêu đề 2 cột.
 > Đầu biểu mẫu là `Mẫu số 02 (webform trên Hệ thống)` — căn phải, đậm, 14 pt.
 
 ---
@@ -56,8 +56,8 @@ cd ~/office-bidding-skills/skills/hsdt-forms    # hoặc nơi anh clone repo
 bash lam-ho-so.sh
 ```
 
-Script hỏi từng câu (Enter = dùng giá trị trong `[ ]`): mã gói → loại gói → **tên dự án** →
-**tên gói thầu** → logo → khổ giấy → nơi lưu. Rồi tự:
+Script hỏi từng câu (Enter = dùng giá trị trong `[ ]`): mã gói: loại gói: **tên dự án**
+**tên gói thầu**: logo: khổ giấy: nơi lưu. Rồi tự:
 sinh bộ biểu mẫu đúng loại gói · đóng dấu letterhead · đánh số trang ở chân trang · kiểm định dạng ·
 mở thư mục kết quả.
 
@@ -67,17 +67,17 @@ Skill **không tự bịa** tên dự án, giá, nhân sự, số liệu tài ch
 
 ```bash
 python3 scripts/ask_context.py --form phieu-ngu-can.md   # xuất phiếu
-#  → mở bằng Word/Notepad, điền sau chữ "Trả lời:" ở mỗi câu (*) = bắt buộc
+# : mở bằng Word/Notepad, điền sau chữ "Trả lời:" ở mỗi câu (*) = bắt buộc
 python3 scripts/ask_context.py --check phieu-ngu-can.md  # kiểm: thiếu là DỪNG và liệt kê còn thiếu
 ```
 
 ```
-❌ CÒN THIẾU 14 MỤC BẮT BUỘC — chưa sinh hồ sơ được:
+CÒN THIẾU 14 MỤC BẮT BUỘC — chưa sinh hồ sơ được:
   [A·A3] Tên dự án — nguyên văn như HSMT?
-          ↳ lấy ở: HSMT
+          nguồn: lấy ở: HSMT
   ...
 ```
-Đủ hết thì mới báo `✅ Đủ ngữ cảnh bắt buộc`.
+Đủ hết thì mới báo `Đủ ngữ cảnh bắt buộc`.
 
 ---
 
@@ -95,7 +95,7 @@ python3 scripts/tt79_extract.py "E-HSMT.docx" out --only 02,03,06,11
 python3 scripts/tt79_extract.py "E-HSMT.docx" out --no-excel
 ```
 
-Ra: `TT79-M<mã>.docx` + `TT79-M<mã>.xlsx` (mỗi bảng → 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
+Ra: `TT79-M<mã>.docx` + `TT79-M<mã>.xlsx` (mỗi bảng: 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
 Tách 32 biểu mẫu mất **< 1 giây** (giữ nguyên 100 % định dạng gốc).
 
 ---

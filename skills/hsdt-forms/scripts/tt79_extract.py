@@ -2,13 +2,13 @@
 """
 tt79_extract.py — Tách bộ biểu mẫu dự thầu (HSDT) từ E-HSMT mẫu theo **Thông tư 79/2025/TT-BTC**.
 
-Nguồn: file E-HSMT mẫu do Bộ Tài chính ban hành kèm TT79 (Mẫu số 3A/4A/5A/6A/7A/8A/9A/10A/10B/…),
+Nguồn: file E-HSMT mẫu do Bộ Tài chính ban hành kèm TT79 (Mẫu số 3A/4A/5A/6A/7A/8A/9A/10A/10B/...),
 Chương IV — "Biểu mẫu mời thầu và dự thầu". Script cắt **nguyên trạng** từng biểu mẫu của
 nhà thầu ra file riêng, giữ 100 % định dạng gốc (Times New Roman 14, khổ A4, lề 20/20/30/20,
 bảng biểu, gộp ô, ghi chú chân trang).
 
   • Word  (.docx) : 1 file / biểu mẫu — dùng để in, ký, scan, hoặc tham chiếu webform
-  • Excel (.xlsx) : mỗi bảng trong biểu mẫu → 1 sheet, giữ nguyên tiêu đề cột của TT79
+  • Excel (.xlsx) : mỗi bảng trong biểu mẫu: 1 sheet, giữ nguyên tiêu đề cột của TT79
   • Index         : DANH-MUC-BIEU-MAU.md — mã mẫu, tên, số sheet, tên file
 
 Cách dùng:
@@ -44,7 +44,7 @@ CH4_BEGIN = re.compile(r"^\s*Chương\s+IV\b", re.I)
 CH4_END = re.compile(r"^\s*(Chương\s+V\b|Phần\s+(?:2\b|thứ\s+hai\b))", re.I)
 SKIP_NUM = {1}                      # Mẫu 01A–01E là biểu mẫu của Chủ đầu tư, không thuộc HSDT
 # TT79 đánh dấu "Scan đính kèm": do NGÂN HÀNG phát hành, nhà thầu không tự lập biểu mẫu này
-# → không đóng gói vào bộ mẫu (nội dung bảo lãnh do tổ chức tín dụng soạn theo mẫu của họ).
+#: không đóng gói vào bộ mẫu (nội dung bảo lãnh do tổ chức tín dụng soạn theo mẫu của họ).
 SKIP_CODES = {"04A", "04B"}
 BAD_TITLE = ("(", "[", "-", "Ghi chú", "Mẫu số", "Nhà thầu", "Liệt kê", "Đối với", "Điều ")
 
@@ -232,7 +232,7 @@ def strip_leading_page_break(body) -> int:
 def write_form(src: Source, dst: str, i0: int, i_end: int, keep_media: bool) -> None:
     """Ghi file mới = bản sao nguồn, body chỉ còn [i0, i_end) + sectPr gốc.
 
-    Giữ nguyên styles.xml, footers, numbering, media được tham chiếu → file ra
+    Giữ nguyên styles.xml, footers, numbering, media được tham chiếu: file ra
     đúng 100 % định dạng gốc TT79 (khổ A4, lề 20/20/30/20, TNR 14).
     """
     body = etree.Element(src.body.tag, src.body.attrib, nsmap=src.body.nsmap)
@@ -272,7 +272,7 @@ def write_form(src: Source, dst: str, i0: int, i_end: int, keep_media: bool) -> 
 
 
 def write_excel(src: Source, dst: str, i0: int, i_end: int) -> int:
-    """Mỗi bảng Word trong biểu mẫu → 1 sheet Excel, giữ nguyên tiêu đề cột TT79."""
+    """Mỗi bảng Word trong biểu mẫu: 1 sheet Excel, giữ nguyên tiêu đề cột TT79."""
     import openpyxl
     from openpyxl.styles import Alignment, Font, PatternFill
 
@@ -346,7 +346,7 @@ def main() -> None:
                 "| Mẫu | Tên biểu mẫu | Sheet Excel | File Word |\n|:--|:--|--:|:--|\n")
         for code, title, sheets, fn in rows:
             f.write(f"| {code} | {title} | {sheets or ''} | `{fn}` |\n")
-    print(f"\n{n_docx} file Word, {n_xlsx} workbook Excel → {a.out}")
+    print(f"\n{n_docx} file Word, {n_xlsx} workbook Excel: {a.out}")
     print(f"Danh mục: {idx}")
 
 

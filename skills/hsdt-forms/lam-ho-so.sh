@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# lam-ho-so.sh — Chạy một lệnh để ra bộ hồ sơ dự thầu (dành cho người không rành kỹ thuật).
+# lam-ho-so.sh - chạy một lệnh để ra bộ hồ sơ dự thầu, dùng cho người không quen kỹ thuật.
 #
 #   bash lam-ho-so.sh
 #
-# Script sẽ hỏi từng câu bằng tiếng Việt (Enter = dùng giá trị mặc định), rồi:
+# Script hỏi từng câu bằng tiếng Việt (Enter: dùng giá trị mặc định), sau đó:
 #   1. ghi cấu hình gói thầu vào projects/<mã-gói>.json
 #   2. tách/đóng dấu letterhead + định dạng cho toàn bộ biểu mẫu
 #   3. kiểm tra lại định dạng và mở thư mục kết quả
@@ -13,8 +13,8 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PY="${PYTHON:-python3}"
 
 echo "=================================================="
-echo " LÀM HỒ SƠ DỰ THẦU (HSDT) — TT 79/2025/TT-BTC"
-echo " Enter = dùng giá trị trong [ ]"
+echo " LÀM HỒ SƠ DỰ THẦU (HSDT) - TT 79/2025/TT-BTC"
+echo "   Enter: dùng giá trị trong [ ]"
 echo "=================================================="
 echo
 
@@ -51,7 +51,7 @@ case "$LT" in
   5) BO="PC-9A";    LOAI="PC" ;;
   *) echo "  ! Không hợp lệ, dùng mặc định EPC."; BO="EPC-10A"; LOAI="EPC" ;;
 esac
-echo "  → Bộ biểu mẫu: $BO"
+echo "  Bộ biểu mẫu: $BO"
 
 # --- 3-4. tên dự án / gói thầu ---
 echo
@@ -94,23 +94,23 @@ cat > "$CFG" << EOF
 }
 EOF
 echo
-echo "①  Đã ghi cấu hình: projects/$MA_GOI.json"
+echo "   Đã ghi cấu hình: projects/$MA_GOI.json"
 
 # --- chạy ---
-echo "②  Đang tạo hồ sơ ($LOAI) …"
+echo "   Đang tạo hồ sơ ($LOAI) ..."
 rm -rf "$OUT"; mkdir -p "$OUT"
 "$PY" "$DIR/scripts/apply_project_format.py" "$DIR/templates/$BO" --config "$CFG" --out "$OUT"
 
-echo "③  Kiểm tra định dạng …"
+echo "   Kiểm tra định dạng ..."
 "$PY" "$DIR/scripts/fix_page_setup.py" --check "$OUT"/*.docx | tail -20
 
 echo
 echo "=================================================="
-echo " XONG. Hồ sơ ở: $OUT"
+echo " Xong. Hồ sơ ở: $OUT"
 echo "=================================================="
 echo "Việc tiếp theo:"
-echo "  • Điền nội dung từng biểu mẫu (nhân sự, thiết bị, tài chính, giá…)"
-echo "  • Kiểm ngữ cảnh còn thiếu:  python3 scripts/ask_context.py --check phieu-ngu-can.md"
-echo "  • Chưa có phiếu?  python3 scripts/ask_context.py --form phieu-ngu-can.md"
+echo "  - Điền nội dung từng biểu mẫu: nhân sự, thiết bị, tài chính, giá"
+echo "  - Kiểm ngữ cảnh còn thiếu: python3 scripts/ask_context.py --check phieu-ngu-can.md"
+echo "  - Chưa có phiếu: python3 scripts/ask_context.py --form phieu-ngu-can.md"
 echo
 open "$OUT" 2>/dev/null || true

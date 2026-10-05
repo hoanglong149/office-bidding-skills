@@ -86,7 +86,7 @@ def _png_size(path: str) -> tuple[int, int]:
         head = f.read(24)
     if head[:8] == b"\x89PNG\r\n\x1a\n":
         return int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
-    return 0, 0                                  # không phải PNG (jpg/…) → đoán tỉ lệ 1:1
+    return 0, 0                                  # không phải PNG (jpg/...): đoán tỉ lệ 1:1
 
 
 def _logo_emu(path: str, max_h_mm: float = 18.0, max_w_mm: float = 36.0) -> tuple[int, int]:
@@ -458,7 +458,7 @@ def main() -> None:
         else:
             shutil.copy2(f, f + ".bak")
         stamp_excel(dst, project, package, page_number)
-        print(f"  ✓ {os.path.basename(dst)}  (excel: print header)")
+        print(f"   {os.path.basename(dst)}  (excel: print header)")
 
     for f in docx:
         dst = f
@@ -473,8 +473,8 @@ def main() -> None:
         n = apply_profile(doc, profile, paper)
         doc.save(dst)
         inject_letterhead(dst, project, package, logos, logo_h, page_number)
-        print(f"  ✓ {os.path.basename(dst)}  (profile={profile}/{paper}, số trang={page_number}, bảng={n}, logo={len(logos)})")
-    print(f"\n{len(docx)} file Word + {len(xlsx)} file Excel → {a.out or 'sửa tại chỗ (.bak được tạo)'}")
+        print(f"   {os.path.basename(dst)}  (profile={profile}/{paper}, số trang={page_number}, bảng={n}, logo={len(logos)})")
+    print(f"\n{len(docx)} file Word + {len(xlsx)} file Excel: {a.out or 'sửa tại chỗ (.bak được tạo)'}")
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ fix_page_setup.py — Chuẩn hoá khổ giấy / lề / font / số trang cho f
 phải 20 mm, Times New Roman, chữ đen.
 
 Sửa 4 lỗi khiến bản in không giống mẫu:
-  1. Thiếu style `Normal` + `<w:pPrDefault>` rỗng → Word tự chế Normal (Calibri 11,
+  1. Thiếu style `Normal` + `<w:pPrDefault>` rỗng: Word tự chế Normal (Calibri 11,
      dãn 1,08, after 8 pt) làm lệch format.
   2. Không có footer đánh số trang (cả NĐ30 và TT79 đều yêu cầu).
   3. Lề trang ngoài dải chuẩn (trên/dưới 20 mm; trái 30 mm; phải 20 mm).
@@ -129,7 +129,7 @@ def fix_ct(ct: str) -> str:
 def analyze(path: str) -> dict:
     """Kiểm tra khổ giấy / lề / font / số trang.
 
-    Tự nhận dạng biểu mẫu HSDT (`Mẫu số …`) — các file này kế thừa định dạng của E-HSMT mẫu
+    Tự nhận dạng biểu mẫu HSDT (`Mẫu số ...`) — các file này kế thừa định dạng của E-HSMT mẫu
     nên KHÔNG có `pPrDefault` dày và đặt số trang ở **header** (không phải footer).
     """
     with zipfile.ZipFile(path) as z:
@@ -220,12 +220,12 @@ def main() -> int:
         print(__doc__); return 1
     for p in files:
         if not os.path.isfile(p):
-            print(f"✗ không thấy {p}"); continue
+            print(f" không thấy {p}"); continue
         try:
             r = process(p, check_only=check)
         except Exception as e:
-            print(f"✗ {os.path.basename(p)} — LỖI: {e}"); continue
-        icon = "✓" if not r["prob"] else ("•" if check else "✎")
+            print(f" {os.path.basename(p)} — LỖI: {e}"); continue
+        icon = "" if not r["prob"] else ("•" if check else "")
         print(f"{icon} {os.path.basename(p)}")
         if r["ok"]:
             print("    đạt:", ", ".join(r["ok"]))

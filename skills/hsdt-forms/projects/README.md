@@ -13,8 +13,8 @@ python3 scripts/apply_project_format.py templates/EPC-10A \
 
 | Khoá | Mặc định | Ý nghĩa |
 |:--|:--|:--|
-| `project` | `[TÊN DỰ ÁN]` | tên dự án — dòng `Project : …` trong letterhead |
-| `package` | `[TÊN GÓI THẦU]` | tên gói thầu — dòng `Bidding Package : …` |
+| `project` | `[TÊN DỰ ÁN]` | tên dự án — dòng `Project : ...` trong letterhead |
+| `package` | `[TÊN GÓI THẦU]` | tên gói thầu — dòng `Bidding Package : ...` |
 | `logo_left` / `logo_right` | `assets/logo-ipc-ec.png` ở phải | ảnh logo (bỏ trống nếu không dùng) |
 | `paper` | `a4` | `a4` hoặc `letter` |
 | `profile` | `intl-epc` | `intl-epc` (áp định dạng bảng/ô) hoặc `keep` |
@@ -23,4 +23,4 @@ python3 scripts/apply_project_format.py templates/EPC-10A \
 
 Script **dừng ngay** nếu tên còn dấu `[ ]` — tránh đóng dấu placeholder lên cả bộ biểu mẫu.
 
-Tham số dòng lệnh (`--project`, `--paper`, …) đè giá trị trong file cấu hình.
+Tham số dòng lệnh (`--project`, `--paper`, ...) đè giá trị trong file cấu hình.

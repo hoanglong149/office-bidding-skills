@@ -1,5 +1,5 @@
 {
-  "_doc": "Ngữ cảnh bắt buộc để ra một bộ HSDT. blocking=true ⇒ CHƯA có thì KHÔNG được chạy bước sinh hồ sơ; phải hỏi lại người dùng. Dùng bởi scripts/ask_context.py.",
+  "_doc": "Ngữ cảnh bắt buộc để ra một bộ HSDT. blocking=true thì CHƯA có thì KHÔNG được chạy bước sinh hồ sơ; phải hỏi lại người dùng. Dùng bởi scripts/ask_context.py.",
   "groups": [
     {
       "id": "A",
