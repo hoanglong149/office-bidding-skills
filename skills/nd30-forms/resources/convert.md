@@ -6,6 +6,16 @@ Pipeline chuyển đổi giữa các định dạng.
 
 ## MD → DOCX (Pandoc + Format)
 
+Dùng script có sẵn, script đã gói cả ba bước (tiền xử lý → Pandoc → chuẩn hoá định dạng):
+
+```bash
+python3 scripts/convert/md_to_docx.py <file.md> [-o <file.docx>] [--no-format]
+```
+
+Script tự xử lý: bỏ YAML frontmatter, `[[wikilink]]` → nhãn, bỏ dòng `### Trang 18` (đánh dấu trang khi OCR).
+
+Các bước thủ công bên dưới chỉ dùng khi cần chỉnh tay.
+
 ### Bước 1: Pandoc convert
 
 ```powershell

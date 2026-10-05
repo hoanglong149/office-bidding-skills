@@ -82,7 +82,7 @@ Quy chuẩn quốc gia cho văn bản hành chính. Bao gồm cả cấu trúc l
 | Thư mục | Nội dung |
 |---|---|
 | `scripts/office/` | Toolkit XML: unpack, pack, clone_text, validate, soffice, helpers |
-| `scripts/convert/` | convert_md_to_docx.py, convert_pdf_to_docx.py |
+| `scripts/convert/` | md_to_docx.py (tiền xử lý + Pandoc + chuẩn hoá), convert_pdf_to_docx.py, batch_pdf_to_md.py |
 | `scripts/format/` | format_docx.py (post-process DOCX sau Pandoc) |
 
 ---
