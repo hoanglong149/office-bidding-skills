@@ -7,8 +7,9 @@
 
 ## Trạng thái
 
-Đã kiểm: render 5 template EPC bằng Chrome headless và chèn vào `.docx` (xem `README-EPC.md`),
-`scripts/self_check.py` báo OK trên các template EPC.
+Đã kiểm: render 5 template EPC và 4 template in bằng Chrome headless, chèn vào `.docx` (kể cả hình
+đặt trên trang ngang), `scripts/self_check.py` báo OK trên các template. Chạy thử trên Chương 3 thuyết
+minh Off-Gas: 3 hình, chữ 7,2-10,3 pt khi in rộng 16 cm.
 
 Chưa kiểm: dùng thật cho một thuyết minh nộp thầu. Khi dùng lần đầu nên xem lại cỡ chữ, tỉ lệ hình
 và màu khi in đen trắng.

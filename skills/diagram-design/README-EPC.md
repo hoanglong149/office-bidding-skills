@@ -46,6 +46,43 @@ Anh cho Em mã màu brand IPC (hoặc URL website công ty), Skill sẽ set mặ
 - Mỗi biểu đồ target density 4/10 — trên 9 node thì tách 2 sơ đồ.
 - Accent (coral/cam) chỉ dành 1-2 node quan trọng nhất.
 
+## Bản in: chọn template theo cỡ chữ
+
+Template trong `templates-epc/` vẽ trên canvas 1000 px với chữ 7-12 px. Đưa vào trang A4 dọc rộng 16 cm
+thì chữ 12 px chỉ còn 5,4 pt, 9 px còn 4,1 pt: in ra khó đọc.
+
+`templates-epc-print/` vẽ trên canvas 880 px với chữ 13-20 px, cho cùng bề rộng 16 cm:
+
+| Cỡ chữ trong file | Khi in rộng 16 cm | Khi in rộng 24,7 cm (trang ngang) |
+|:--|--:|--:|
+| 20 px (tên thiết bị) | 10,3 pt | 15,9 pt |
+| 18 px (tên nút) | 9,3 pt | 14,3 pt |
+| 14 px (thông số) | 7,2 pt | 11,1 pt |
+| 13 px (nhãn mũi tên, chú giải) | 6,7 pt | 10,3 pt |
+
+Ba file có sẵn:
+
+| File | Dùng cho |
+|:--|:--|
+| `print-block-a.html` | Sơ đồ khối một hàng, 4 thiết bị (cụm đầu vào) |
+| `print-block-b.html` | Sơ đồ khối một hàng, 3 thiết bị (cụm tách lạnh, sản phẩm) |
+| `print-flow.html` | Lưu trình 5 bước, 4 làn |
+
+Sửa nội dung bằng cách thay chữ ngay trong file HTML, giữ nguyên toạ độ.
+
+Khi hình quá rộng mà muốn chữ to hơn nữa, đặt riêng hình đó trên trang ngang:
+
+```bash
+python3 scripts/figdoc.py --figs ./hinh --docx "Thuyet minh.docx" --white \
+        --landscape fig-c-luu-trinh
+```
+
+Script chèn hình vào một section ngang mới (bề rộng dùng được 24,7 cm) rồi mở lại section dọc cho phần
+văn bản phía sau. Nhiều hình thì ghi cách nhau dấu phẩy.
+
+Quy tắc chọn: hình ít nút, nhãn ngắn thì dùng `templates-epc-print` ở trang dọc; hình nhiều nút, đi ngang
+thì đặt trên trang ngang; trên 9 nút thì tách thành hai hình.
+
 ## Ghép hình vào thuyết minh Word (một lệnh)
 
 Mỗi sơ đồ là một file `.html` (từ `templates-epc/` hoặc do skill sinh). Đặt tất cả vào một thư mục,

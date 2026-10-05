@@ -180,10 +180,13 @@ def next_figure_number(doc) -> int:
 
 
 def insert_into_docx(docx_path: str, figures: list[tuple[str, str]], width_cm: float,
-                     create_new: bool) -> None:
+                     create_new: bool, landscape: set[str] | None = None) -> None:
     from docx import Document
+    from docx.enum.section import WD_ORIENT, WD_SECTION
     from docx.enum.text import WD_ALIGN_PARAGRAPH
-    from docx.shared import Cm, Pt
+    from docx.shared import Cm, Mm, Pt
+
+    landscape = landscape or set()
 
     if create_new and not os.path.exists(docx_path):
         doc = Document()
@@ -220,6 +223,16 @@ def insert_into_docx(docx_path: str, figures: list[tuple[str, str]], width_cm: f
             for r in list(par.runs):
                 r.text = r.text.replace(marker, "")
 
+        # hình rộng: đặt riêng trên trang ngang để được bề rộng 24,7 cm thay vì 16 cm
+        base = os.path.splitext(os.path.basename(png))[0]
+        if base in landscape:
+            sec = doc.add_section(WD_SECTION.NEW_PAGE)
+            sec.orientation = WD_ORIENT.LANDSCAPE
+            sec.page_width, sec.page_height = Mm(297), Mm(210)
+            sec.left_margin, sec.right_margin = Mm(30), Mm(20)
+            sec.top_margin = sec.bottom_margin = Mm(20)
+            par = doc.add_paragraph()
+
         par.alignment = WD_ALIGN_PARAGRAPH.CENTER
         par.add_run().add_picture(png, width=Cm(width_cm))
 
@@ -230,6 +243,13 @@ def insert_into_docx(docx_path: str, figures: list[tuple[str, str]], width_cm: f
         run.font.size = Pt(12)
         if par is not None and par._p.getparent() is not None:
             par._p.addnext(cap._p)
+
+        if base in landscape:                     # trả về trang dọc cho phần văn bản tiếp theo
+            back = doc.add_section(WD_SECTION.NEW_PAGE)
+            back.orientation = WD_ORIENT.PORTRAIT
+            back.page_width, back.page_height = Mm(210), Mm(297)
+            back.left_margin, back.right_margin = Mm(30), Mm(20)
+            back.top_margin = back.bottom_margin = Mm(20)
 
     doc.save(docx_path)
 
@@ -245,6 +265,8 @@ def main() -> int:
     ap.add_argument("--scale", type=int, default=3, help="hệ số phóng PNG (mặc định 3)")
     ap.add_argument("--white", action="store_true", help="nền PNG trắng thay vì trong suốt")
     ap.add_argument("--png-only", action="store_true", help="chỉ render, không chèn Word")
+    ap.add_argument("--landscape", default="", metavar="TÊN",
+                    help="danh sách tên file (không đuôi) đặt riêng trên trang ngang, cách nhau dấu phẩy")
     ap.add_argument("--chrome", default=None)
     a = ap.parse_args()
 
@@ -277,7 +299,7 @@ def main() -> int:
 
     if not a.docx:
         raise SystemExit("Thiếu --docx (hoặc dùng --png-only nếu chỉ muốn render).")
-    insert_into_docx(a.docx, figures, a.width, a.new)
+    insert_into_docx(a.docx, figures, a.width, a.new, {x.strip() for x in a.landscape.split(',') if x.strip()})
     print(f"\nĐã chèn {len(figures)} hình vào {a.docx}")
     return 0
 
