@@ -88,10 +88,11 @@ Nếu không dùng môi trường ảo, cài trực tiếp:
 python3 -m pip install --user lxml python-docx openpyxl
 ```
 
-Skill `nd30-forms` cần thêm cho một số script chuyển đổi và slide:
+Skill `nd30-forms` (tạo/sửa Word, Excel, Slide, chuyển đổi PDF):
 
 ```bash
-python3 -m pip install --user python-pptx pypdf pdf2image
+cd ../nd30-forms
+python3 -m pip install -r requirements.txt      # trong môi trường ảo ở trên
 ```
 
 Chuyển đổi sang PDF trong `nd30-forms` cần LibreOffice (`soffice`) trên PATH:
