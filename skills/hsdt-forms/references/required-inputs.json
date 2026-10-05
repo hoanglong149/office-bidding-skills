@@ -1,0 +1,46 @@
+{
+  "_doc": "Ngữ cảnh bắt buộc để ra một bộ HSDT. blocking=true ⇒ CHƯA có thì KHÔNG được chạy bước sinh hồ sơ; phải hỏi lại người dùng. Dùng bởi scripts/ask_context.py.",
+  "groups": [
+    {
+      "id": "A",
+      "name": "Khởi động — bắt buộc trước khi chạy",
+      "items": [
+        {"id": "A1", "blocking": true, "question": "File Chương IV (Bidding Forms) của E-HSMT thực tế — đường dẫn?", "why": "đối chiếu số mẫu, mục nào Webform / mục nào Scan", "where": "HSMT gói thầu"},
+        {"id": "A2", "blocking": true, "question": "Loại gói thầu: EPC / xây lắp / hàng hóa / EP / EC / PC / tư vấn?", "why": "chọn đúng bộ biểu mẫu", "where": "quyết định của gói"},
+        {"id": "A3", "blocking": true, "question": "Tên dự án — nguyên văn như HSMT?", "why": "letterhead dòng Project", "where": "HSMT"},
+        {"id": "A4", "blocking": true, "question": "Tên gói thầu — nguyên văn như HSMT?", "why": "letterhead dòng Bidding Package", "where": "HSMT"},
+        {"id": "A5", "blocking": false, "question": "Logo nhà thầu (và logo CĐT nếu HSMT yêu cầu) — đường dẫn ảnh?", "why": "letterhead ô phải", "where": "hồ sơ nhà thầu"},
+        {"id": "A6", "blocking": false, "question": "Khổ giấy HSMT yêu cầu (A4 mặc định) và vị trí số trang (chân trang mặc định)?", "why": "chuẩn trang", "where": "Chương I/IV HSMT"},
+        {"id": "A7", "blocking": true, "question": "Nộp qua mạng (E-HSDT) hay nộp bản giấy? Bản giấy thì cần in/ký/scan những mẫu nào?", "why": "quyết định Word hay Excel là bản chính", "where": "HSMT"}
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Dữ liệu điền từng nhóm mẫu",
+      "items": [
+        {"id": "B1", "blocking": true, "forms": ["02"], "question": "Đơn dự thầu: ngày phát hành, MST nhà thầu, giá dự thầu, tỷ lệ giảm giá (nếu có), hiệu lực E-HSDT (ngày), giá trị + hiệu lực bảo đảm dự thầu?", "where": "bộ phận thầu + ngân hàng"},
+        {"id": "B2", "blocking": true, "forms": ["03"], "question": "Liên danh: tên+MST từng thành viên, người đại diện, phân công công việc và tỷ lệ % đảm nhận?", "where": "thỏa thuận liên danh"},
+        {"id": "B3", "blocking": false, "forms": ["05A1", "05A2", "05A3", "05A4"], "question": "Danh mục hợp đồng tương tự (tên/số, ngày ký, ngày hoàn thành, giá trị, CĐT, phạm vi) + bản scan?", "where": "hồ sơ năng lực"},
+        {"id": "B4", "blocking": false, "forms": ["05B"], "question": "Năng lực sản xuất hàng hóa: tên/địa chỉ nhà máy, tổng mức đầu tư, công suất, chứng nhận?", "where": "nhà sản xuất"},
+        {"id": "B5", "blocking": true, "forms": ["06A", "06B", "06C"], "question": "Danh sách nhân sự chủ chốt (họ tên, vị trí) + CV từng người (CCCD, ngày sinh, bằng cấp/chứng chỉ, đơn vị công tác, số năm kinh nghiệm)?", "where": "bộ phận nhân sự"},
+        {"id": "B6", "blocking": true, "forms": ["06D"], "question": "Danh mục thiết bị thi công: loại, NSX, model, công suất, năm sản xuất, xuất xứ, địa điểm, sở hữu/thuê?", "where": "bộ phận kỹ thuật"},
+        {"id": "B7", "blocking": false, "forms": ["07"], "question": "Có hợp đồng nào không hoàn thành do lỗi nhà thầu trong quá khứ không? (nếu không: ghi 'không')", "where": "hồ sơ năng lực"},
+        {"id": "B8", "blocking": true, "forms": ["08A", "08B", "08C"], "question": "BCTC kiểm toán 3 năm gần nhất (tổng tài sản, nợ, doanh thu, lợi nhuận) + danh sách HĐ đang thực hiện (giá trị chưa thanh toán, số tháng còn lại)?", "where": "bộ phận tài chính"},
+        {"id": "B9", "blocking": false, "forms": ["09A", "09B", "09C"], "question": "Nhà thầu phụ: danh mục công việc, tên/địa chỉ NTP, phạm vi, tỷ lệ %?", "where": "thương thảo NTP"},
+        {"id": "B10", "blocking": true, "forms": ["10A"], "question": "Tiến độ: các mốc thời gian theo Chương V HSMT?", "where": "HSMT"},
+        {"id": "B11", "blocking": true, "forms": ["10B", "11.1A", "11.1B", "11.1C", "11.1D", "11.2A", "11.2B", "11.2C", "11.2D"], "question": "BOQ/khối lượng + đơn giá + loại hợp đồng (trọn gói / đơn giá cố định / điều chỉnh / hỗn hợp) — chào giá chưa gồm hay đã gồm thuế, phí, lệ phí?", "where": "bộ phận thầu (QUYẾT ĐỊNH GIÁ)"},
+        {"id": "B12", "blocking": false, "forms": ["12A", "12B", "12C"], "question": "Công nhật, khoản tạm tính, số liệu điều chỉnh giá — có áp dụng không? nếu có thì số liệu nào?", "where": "bộ phận thầu"},
+        {"id": "B13", "blocking": false, "forms": ["13A", "13B", "13C"], "question": "Có hàng hóa sản xuất trong nước để kê khai ưu đãi không? chi phí sản xuất trong nước?", "where": "nhà sản xuất/nhà thầu"}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Con người phải làm — skill không thay được",
+      "items": [
+        {"id": "C1", "blocking": true, "question": "Ai chịu trách nhiệm chốt giá dự thầu và ký số nộp bài?", "why": "skill không tự định giá"},
+        {"id": "C2", "blocking": true, "question": "Tài liệu cần scan + công chứng (bằng cấp, chứng chỉ, BCTC, bảo lãnh) đã có bản scan chưa?", "why": "skill không tạo pháp lý"},
+        {"id": "C3", "blocking": false, "question": "Đề xuất kỹ thuật / biện pháp thi công (Chương V) do ai lập?", "why": "ngoài phạm vi bộ biểu mẫu"}
+      ]
+    }
+  ]
+}

@@ -22,7 +22,32 @@ tags: [skill, hsdt, dau-thau, tt79, muasamcong, docx, xlsx, e-hsmt]
 
 ---
 
-## 0. Chuẩn áp dụng — KHÔNG nhầm với NĐ30
+## 0. Quy trình bắt buộc — kiểm & HỎI LẠI ngữ cảnh trước khi làm
+
+Skill **không tự bịa** thông tin gói thầu. Trước khi sinh hồ sơ, phải có đủ ngữ cảnh:
+
+```bash
+python3 scripts/ask_context.py                       # in câu hỏi (để hỏi trong chat)
+python3 scripts/ask_context.py --form phieu.md       # xuất PHIẾU cho người dùng điền
+python3 scripts/ask_context.py --check phieu.md      # kiểm: thiếu mục (*) thì DỪNG (exit 1)
+```
+
+**Luật cứng:**
+
+1. Chưa `✅ Đủ ngữ cảnh bắt buộc` thì **KHÔNG** chạy `tt79_extract.py` / `apply_project_format.py`.
+2. Thiếu thông tin ⇒ **hỏi lại người dùng**, không suy đoán, không lấy ví dụ cho có.
+3. **NEVER** tự bịa: tên dự án / tên gói thầu, giá dự thầu, nhân sự, số liệu tài chính, ngày tháng,
+   giá trị bảo đảm dự thầu. Không có nguồn ⇒ ghi `[……]` và nêu rõ đang thiếu.
+4. Hỏi theo lô, mỗi câu có ngữ cảnh "lấy ở đâu" (bảng câu hỏi đã ghi sẵn).
+5. Người dùng **không rành kỹ thuật** ⇒ đưa `--form` để họ điền bằng Word/Notepad rồi `--check`,
+   hoặc bảo họ chạy `bash lam-ho-so.sh` (hỏi từng câu, tự sinh hồ sơ).
+
+Danh sách ngữ cảnh: `references/required-inputs.json` (nguồn duy nhất) ·
+giải thích cho người dùng: `references/inputs-checklist.md`.
+
+---
+
+## 1. Chuẩn áp dụng — KHÔNG nhầm với NĐ30
 
 | | **HSDT (skill này)** | Văn bản hành chính |
 |:--|:--|:--|
@@ -44,7 +69,7 @@ tags: [skill, hsdt, dau-thau, tt79, muasamcong, docx, xlsx, e-hsmt]
 
 ---
 
-## 1. Nguyên tắc: lấy biểu mẫu TỪ E-HSMT mẫu, không tự chế
+## 2. Nguyên tắc: lấy biểu mẫu TỪ E-HSMT mẫu, không tự chế
 
 Biểu mẫu HSDT nằm trong **Chương IV — Biểu mẫu mời thầu và dự thầu** của E-HSMT mẫu
 (Mẫu số 3A/4A/5A/6A/7A/8A/9A/10A/10B tuỳ loại gói thầu). Bản quy định số mẫu, tên mẫu,
@@ -73,9 +98,15 @@ Mỗi bộ: `TT79-M02.docx` (Word: in/ký/scan) · `TT79-M06A.xlsx` (Excel: bả
 
 ---
 
-## 2. Chạy nhanh
+## 3. Chạy nhanh
 
-### 2.0. Dùng ngay bộ có sẵn (không cần Python)
+### 3.0. Người không rành kỹ thuật — một lệnh, hỏi từng câu
+
+```bash
+bash lam-ho-so.sh      # hỏi mã gói, loại gói, tên dự án/gói, logo, khổ giấy → ra bộ hồ sơ
+```
+
+### 3.0b. Dùng ngay bộ có sẵn (không cần Python)
 Chọn đúng bộ theo loại gói thầu trong `templates/` rồi copy ra thư mục làm việc:
 
 | Loại gói | Bộ |
@@ -86,9 +117,9 @@ Chọn đúng bộ theo loại gói thầu trong `templates/` rồi copy ra thư
 | EC (tư vấn + xây lắp) | `templates/EC-8A/` |
 | PC (hàng hóa + xây lắp) | `templates/PC-9A/` |
 
-Gói EPC hai túi hồ sơ hoặc gói thực tế: xem §2.1.
+Gói EPC hai túi hồ sơ hoặc gói thực tế: xem §3.1.
 
-### 2.1. Tách bộ biểu mẫu cho loại gói thầu khác
+### 3.1. Tách bộ biểu mẫu cho loại gói thầu khác
 ```bash
 python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx  out/xay-lap
 python3 scripts/tt79_extract.py sources/TT79-M4A-E-HSMT-Hang-hoa-01-tui.docx  out/hang-hoa
@@ -100,7 +131,7 @@ python3 scripts/tt79_extract.py <E-HSMT.docx> out --no-excel        # chỉ Word
 
 Ra: `TT79-M<mã>-<tên>.docx` + `TT79-M<mã>-<tên>.xlsx` (mỗi bảng → 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
 
-### 2.2. Đóng dấu letterhead dự án + áp định dạng gói thầu
+### 3.2. Đóng dấu letterhead dự án + áp định dạng gói thầu
 
 File HSDT thật thường có **letterhead tên dự án / tên gói thầu** ở đầu mỗi trang
 (bảng không viền: nội dung bên trái, logo bên phải) và định dạng bảng/ô riêng của gói.
@@ -127,7 +158,7 @@ Letterhead chèn vào `word/header1.xml` (bảng không viền: tên dự án + 
 với `.xlsx` thì ghi vào **print header** của mọi sheet (openpyxl `oddHeader`).
 Chi tiết + giá trị XML: `references/format-profiles.md`.
 
-### 2.3. Chuẩn hoá khổ giấy / lề / font cho file .docx
+### 3.3. Chuẩn hoá khổ giấy / lề / font cho file .docx
 ```bash
 python3 scripts/fix_page_setup.py --check file.docx     # kiểm tra
 python3 scripts/fix_page_setup.py         file.docx     # sửa (tạo .bak)
@@ -135,7 +166,7 @@ python3 scripts/fix_page_setup.py         file.docx     # sửa (tạo .bak)
 
 ---
 
-## 3. Định dạng chuẩn của biểu mẫu (đã đúng trong bộ đã tách)
+## 4. Định dạng chuẩn của biểu mẫu (đã đúng trong bộ đã tách)
 
 | Thông số | Giá trị |
 |:--|:--|
@@ -157,7 +188,7 @@ Dùng `fix_page_setup.py` để xử lý; **không sửa tay từng file**.
 
 ---
 
-## 4. Phân vai Word / Excel
+## 5. Phân vai Word / Excel
 
 | Loại | Định dạng | Lý do |
 |:--|:--|:--|
@@ -169,7 +200,7 @@ rồi nhập lên; file Word dùng để in/ký/scan khi HSMT yêu cầu bản g
 
 ---
 
-## 5. Danh mục biểu mẫu EPC (30 mẫu — Chương IV, Mẫu số 10A)
+## 6. Danh mục biểu mẫu EPC (30 mẫu — Chương IV, Mẫu số 10A)
 
 | Nhóm | Mẫu |
 |:--|:--|
@@ -192,7 +223,7 @@ Số mẫu khác nhau giữa các loại gói (EPC 32 · xây lắp 25 · hàng 
 
 ---
 
-## 6. Checklist khi làm HSDT
+## 7. Checklist khi làm HSDT
 
 1. Mở **Chương IV của E-HSMT thực tế** — đối chiếu danh mục biểu mẫu (số Mẫu, mục nào Webform,
    mục nào Scan, mục nào phải nộp bản giấy). Số mẫu có thể khác bộ mẫu chuẩn.
@@ -204,7 +235,7 @@ Số mẫu khác nhau giữa các loại gói (EPC 32 · xây lắp 25 · hàng 
 
 ---
 
-## 7. Cấu trúc skill
+## 8. Cấu trúc skill
 
 ```text
 hsdt-forms/
@@ -212,7 +243,9 @@ hsdt-forms/
 ├── sources/                 # E-HSMT mẫu chính thức (TT79/2025/TT-BTC)
 ├── templates/               # 5 bộ biểu mẫu đã tách (EPC, xây lắp, hàng hóa, EC, PC)
 ├── examples/demo_project.py # điền dữ liệu mẫu vào vài bảng để xem trước
+├── lam-ho-so.sh             # chạy 1 lệnh: hỏi ngữ cảnh → sinh hồ sơ (cho người không rành)
 ├── scripts/
+│   ├── ask_context.py             # hỏi lại ngữ cảnh / xuất phiếu / kiểm phiếu
 │   ├── tt79_extract.py            # tách biểu mẫu từ E-HSMT mẫu       ← công cụ chính
 │   ├── apply_project_format.py    # letterhead dự án + profile định dạng
 │   └── fix_page_setup.py          # kiểm tra / chuẩn hoá khổ giấy-lề-font-số trang

@@ -47,6 +47,40 @@ Danh mục tổng hợp 5 bộ: [`templates/DANH-MUC-TONG-HOP.md`](templates/DAN
 
 ---
 
+## Bắt đầu nhanh — dành cho người **không rành kỹ thuật**
+
+Mở Terminal, dán đúng 3 dòng:
+
+```bash
+cd ~/office-bidding-skills/skills/hsdt-forms    # hoặc nơi anh clone repo
+bash lam-ho-so.sh
+```
+
+Script hỏi từng câu (Enter = dùng giá trị trong `[ ]`): mã gói → loại gói → **tên dự án** →
+**tên gói thầu** → logo → khổ giấy → nơi lưu. Rồi tự:
+sinh bộ biểu mẫu đúng loại gói · đóng dấu letterhead · đánh số trang ở chân trang · kiểm định dạng ·
+mở thư mục kết quả.
+
+### Chưa đủ thông tin thì phải hỏi lại
+
+Skill **không tự bịa** tên dự án, giá, nhân sự, số liệu tài chính. Có sẵn **phiếu ngữ cảnh**:
+
+```bash
+python3 scripts/ask_context.py --form phieu-ngu-can.md   # xuất phiếu
+#  → mở bằng Word/Notepad, điền sau chữ "Trả lời:" ở mỗi câu (*) = bắt buộc
+python3 scripts/ask_context.py --check phieu-ngu-can.md  # kiểm: thiếu là DỪNG và liệt kê còn thiếu
+```
+
+```
+❌ CÒN THIẾU 14 MỤC BẮT BUỘC — chưa sinh hồ sơ được:
+  [A·A3] Tên dự án — nguyên văn như HSMT?
+          ↳ lấy ở: HSMT
+  ...
+```
+Đủ hết thì mới báo `✅ Đủ ngữ cảnh bắt buộc`.
+
+---
+
 ## Tách lại / tách cho gói thầu thực tế
 
 ```bash

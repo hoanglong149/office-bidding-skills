@@ -50,9 +50,18 @@ giữ 100 % định dạng gốc; kèm công cụ tách cho mọi loại gói th
 | `EC-8A` | EC | 26 | 23 |
 | `PC-9A` | PC | 35 | 32 |
 
+**Người không rành kỹ thuật — 1 lệnh:**
+
 ```bash
-cd skills/hsdt-forms
+cd skills/hsdt-forms && bash lam-ho-so.sh     # hỏi từng câu → ra bộ hồ sơ, mở thư mục kết quả
+```
+
+Thiếu ngữ cảnh thì skill **hỏi lại**, không tự bịa:
+`python3 scripts/ask_context.py --form phieu-ngu-can.md` → điền → `--check phieu-ngu-can.md`.
+
+```bash
 python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx out/xay-lap
+python3 scripts/apply_project_format.py templates/EPC-10A --config projects/<mã-gói>.json --out out
 python3 scripts/fix_page_setup.py --check file.docx
 ```
 
