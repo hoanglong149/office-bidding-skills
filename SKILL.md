@@ -1,163 +1,175 @@
 ---
 name: hsdt-forms
 description: >
-  MUST USE khi cần lập/chuẩn hoá Hồ sơ dự thầu (HSDT) hoặc biểu mẫu đấu thầu dạng Word/Excel:
-  "làm HSDT", "biểu mẫu dự thầu", "bidding form", "đơn dự thầu", "bảng giá dự thầu",
-  "BOQ điền giá", "danh mục hợp đồng tương tự", "nhân sự chủ chốt", "list nhà thầu phụ",
-  "deviation form", "grand summary", "price schedule", "letterhead theo gói thầu".
-  Cũng dùng khi cần chuẩn hoá định dạng .docx theo Nghị định 30/2020/NĐ-CP
-  ("in ra không giống format", "lỗi font", "thiếu số trang", "lệch lề", "rớt dòng tiêu đề").
-  Bộ đã sinh sẵn: `templates/` gồm 11 file Word + 11 workbook Excel (28 sheet, phủ 26 form
-  danh mục & biểu giá) — copy dùng ngay, không cần cài Python.
-  `examples/demo_project.py` sinh bộ demo hoàn chỉnh để đối chiếu.
-  NOT for: soạn thảo công văn/tờ trình hành chính thường ngày (dùng template ND30 riêng),
-  bóc khối lượng/BOQ kỹ thuật (dùng skill BOQ), hay đọc HSMT để tóm tắt điều khoản.
+  MUST USE khi làm Hồ sơ dự thầu (HSDT / E-HSDT) hoặc cần biểu mẫu đấu thầu theo
+  Thông tư 79/2025/TT-BTC: "làm HSDT", "biểu mẫu dự thầu", "Mẫu số 02", "đơn dự thầu",
+  "thỏa thuận liên danh", "bảo lãnh dự thầu", "hợp đồng tương tự", "nhân sự chủ chốt",
+  "thiết bị thi công chủ yếu", "nguồn lực tài chính", "nhà thầu phụ đặc biệt",
+  "bảng tổng hợp giá dự thầu", "bảng kê công nhật", "hàng hóa hưởng ưu đãi",
+  "E-HSMT mẫu", "Mẫu số 10A", "webform E-HSDT", "tách biểu mẫu từ HSMT".
+  Cũng dùng khi cần chuẩn hoá khổ giấy / lề / font cho file .docx đấu thầu.
+  NOT for: soạn công văn – tờ trình – quyết định hành chính (thể thức NĐ30, dùng template riêng);
+  bóc khối lượng kỹ thuật / lập BOQ (dùng skill BOQ).
 date: 2026-10-05
-tags: [skill, hsdt, dau-thau, docx, xlsx, nd30, bidding-form, ipc]
+tags: [skill, hsdt, dau-thau, tt79, muasamcong, docx, xlsx, e-hsmt]
 ---
 
-# HSDT Forms — Bộ biểu mẫu Hồ sơ dự thầu (Word + Excel, chuẩn NĐ30)
+# HSDT Forms — Biểu mẫu Hồ sơ dự thầu theo **TT 79/2025/TT-BTC**
 
-> **Dùng skill này KHI**: lập HSDT mới, chuẩn hoá biểu mẫu thầu, chuyển list/biểu giá sang Excel,
-> hoặc sửa lỗi "in ra không giống format" của .docx.
-> **KHÔNG dùng KHI**: soạn công văn/tờ trình/quyết định hành chính (dùng `00 System/Templates/ND30-*.md`),
-> bóc khối lượng kỹ thuật (dùng skill BOQ).
+> **Dùng khi**: lập E-HSDT gói thầu EPC / xây lắp / hàng hóa / EP / EC / PC / tư vấn,
+> cần đúng biểu mẫu và đúng định dạng do Bộ Tài chính ban hành.
+> **KHÔNG dùng khi**: soạn văn bản hành chính (công văn, tờ trình…) — thể thức NĐ30 khác hẳn.
 
 ---
 
-## 1. Nguyên tắc phân vai Word vs Excel (BẮT BUỘC)
+## 0. Chuẩn áp dụng — KHÔNG nhầm với NĐ30
 
-| Loại biểu mẫu | Định dạng | Lý do |
+| | **HSDT (skill này)** | Văn bản hành chính |
 |:--|:--|:--|
-| Đơn từ, ủy quyền, thỏa thuận, bảo đảm, xác nhận, CV | **Word (.docx)** | Có tính văn bản, cần chữ ký/đóng dấu, bố cục nghị luận |
-| **Danh mục / list / biểu giá / bảng kê số liệu** | **Excel (.xlsx)** | Nhiều dòng, cần công thức, lọc, tổng, in lặp tiêu đề |
+| Chuẩn | **TT 79/2025/TT-BTC** ngày 04/8/2025 | NĐ 30/2020/NĐ-CP |
+| Mẫu | `Mẫu số 02`, `Mẫu số 10A`… (Chương IV E-HSMT) | Quốc hiệu, tên loại văn bản, ký hiệu |
+| Đầu trang | **`Mẫu số X (Webform trên Hệ thống)`** — phải, đậm, 14 pt | Khối tiêu đề 2 cột + `Số: …/…` |
+| Nơi nhận / địa danh–ngày | **KHÔNG có** | Có |
+| Khổ giấy / lề / font | A4 · 20-20-**30**-20 mm · Times New Roman **14 pt** | giống |
 
-**NEVER** làm danh mục dài trong Word (rớt trang, không tổng được).
-**NEVER** làm đơn dự thầu trong Excel.
+**NEVER** gắn khối tiêu đề kiểu công văn (Số: …/…-HSDT, "Hà Nội, ngày …") vào biểu mẫu HSDT,
+**NEVER** đặt "Nơi nhận", "Kính gửi" theo thể thức hành chính vào các mẫu 05–13.
+
+### Căn cứ pháp lý
+- Luật Đấu thầu 22/2023/QH15 (sửa đổi: 57/2024/QH15, 90/2025/QH15)
+- NĐ 214/2025/NĐ-CP (04/8/2025) · NĐ 349/2026/NĐ-CP (sửa đổi)
+- **TT 79/2025/TT-BTC** (04/8/2025) — hướng dẫn cung cấp, đăng tải thông tin đấu thầu và
+  **mẫu hồ sơ đấu thầu trên Hệ thống mạng đấu thầu quốc gia** (thay TT 22/2024/TT-BKHĐT)
+- Hệ thống: https://muasamcong.mof.gov.vn
+
+---
+
+## 1. Nguyên tắc: lấy biểu mẫu TỪ E-HSMT mẫu, không tự chế
+
+Biểu mẫu HSDT nằm trong **Chương IV — Biểu mẫu mời thầu và dự thầu** của E-HSMT mẫu
+(Mẫu số 3A/4A/5A/6A/7A/8A/9A/10A/10B tuỳ loại gói thầu). Bản quy định số mẫu, tên mẫu,
+cột dữ liệu và ghi chú chân trang — **không được tự sáng tác**.
+
+Skill này **cắt nguyên trạng** từng biểu mẫu ra file riêng — giữ 100 % định dạng gốc
+(khổ, lề, font, gộp ô, ghi chú). Không dựng lại mẫu bằng tay.
+
+```
+sources/                     ← E-HSMT mẫu chính thức (TT79)
+├── TT79-M10A-E-HSMT-EPC-01-tui.docx
+├── TT79-M3A-E-HSMT-Xay-lap-01-tui.docx
+├── TT79-M4A-E-HSMT-Hang-hoa-01-tui.docx
+├── TT79-M8A-E-HSMT-EC-01-tui.docx
+└── TT79-M9A-E-HSMT-PC-01-tui.docx
+
+templates/EPC-10A/           ← đã tách sẵn cho gói EPC (32 biểu mẫu)
+├── TT79-M02-DON-DU-THAU.docx        … Word: in / ký / scan / tham chiếu
+├── TT79-M06A-BANG-DE-XUAT-NHAN-SU-CHU-CHOT.xlsx … Excel: bảng nhiều dòng
+└── DANH-MUC-BIEU-MAU.md
+```
 
 ---
 
 ## 2. Chạy nhanh
 
-### 2.0. Cách nhanh nhất — dùng template có sẵn (không cần Python)
+### 2.0. Dùng ngay bộ có sẵn (không cần Python)
+Copy `templates/EPC-10A/*` cho gói EPC. Với loại gói khác, xem §2.1.
 
-```text
-templates/                     ← 22 file đã sinh sẵn, đúng định dạng NĐ30
-├── HSDT-F01-Letter-of-Bid-Technical.docx      … 11 file Word
-└── HSDT-F20-F23-Bieu-gia.xlsx                 … 11 workbook Excel (28 sheet)
-```
-
-Copy `templates/*` ra thư mục gói thầu là dùng được ngay.
-Muốn xem **bộ thành phẩm trông thế nào**: mở `demo_output/` hoặc xem ảnh trong `examples/preview/`.
-
-### 2.1. Sinh lại / tuỳ biến bằng script
-
+### 2.1. Tách bộ biểu mẫu cho loại gói thầu khác
 ```bash
-SK="$(dirname "$(readlink -f "$0")")"   # thư mục skill
-bash "$SK/scripts/build_all.sh"                         # sinh lại toàn bộ Word + Excel
-python3 "$SK/scripts/build_word.py"  [thư_mục_đích]     # chỉ Word (11 file)
-python3 "$SK/scripts/build_excel.py" [thư_mục_đích]     # chỉ Excel (11 workbook)
-python3 "$SK/scripts/fix_nd30.py" --check  <file.docx>  # kiểm tra định dạng 1 file
-python3 "$SK/scripts/fix_nd30.py"          <file.docx>  # tự chuẩn hoá (tạo .bak)
-python3 "$SK/scripts/fill_letterhead.py" <thư_mục> --bidder "..." --employer "..." \
-        --place "Hà Nội" --doc-no "05/2026-HSDT" --date "ngày 05 tháng 10 năm 2026"
+python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx  out/xay-lap
+python3 scripts/tt79_extract.py sources/TT79-M4A-E-HSMT-Hang-hoa-01-tui.docx  out/hang-hoa
+
+# chỉ lấy một số mẫu (tiền tố mã mẫu)
+python3 scripts/tt79_extract.py sources/TT79-M10A-E-HSMT-EPC-01-tui.docx out --only 02,03,06,11
+python3 scripts/tt79_extract.py <E-HSMT.docx> out --no-excel        # chỉ Word
 ```
 
-Mặc định ghi ra `./hsdt_forms` (hoặc `$HSDT_OUT`). Khi làm gói thầu cụ thể:
-**copy ra thư mục gói thầu rồi mới sửa** — không sửa trực tiếp trong `templates/`.
+Ra: `TT79-M<mã>-<tên>.docx` + `TT79-M<mã>-<tên>.xlsx` (mỗi bảng → 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
 
-### 2.2. Demo end-to-end
-
+### 2.2. Chuẩn hoá khổ giấy / lề / font cho file .docx
 ```bash
-python3 "$SK/examples/demo_project.py" [thư_mục_output]
+python3 scripts/fix_page_setup.py --check file.docx     # kiểm tra
+python3 scripts/fix_page_setup.py         file.docx     # sửa (tạo .bak)
 ```
-
-Lấy `templates/` → điền letterhead gói giả định → chèn dữ liệu thiết bị mẫu → xuất bộ hoàn chỉnh.
-Dùng để học pipeline hoặc để kiểm tra môi trường mới cài.
 
 ---
 
-## 3. Quy cách định dạng NĐ30 (đã áp sẵn — không tự ý đổi)
+## 3. Định dạng chuẩn của biểu mẫu (đã đúng trong bộ đã tách)
 
 | Thông số | Giá trị |
 |:--|:--|
 | Khổ giấy | A4 210 × 297 mm |
 | Lề | trên 20 · dưới 20 · **trái 30** · **phải 20** mm |
-| Font | Times New Roman, đen |
-| Cỡ chữ | nội dung **13 pt**; bảng **11 pt**; chú thích 9–10 pt |
-| Dãn dòng | **1,2**; khoảng cách sau đoạn **6 pt** |
-| Số trang | giữa lề dưới, field `PAGE`, 12 pt |
-| Khối tiêu đề | **2 cột 6,0 / 10,0 cm**, co giãn ký tự **95 %** → không rớt dòng |
-| Bảng | rộng **100 %** khổ chữ, `tblLayout=fixed` → Word không co cột |
-| Excel in | A4 (ngang nếu bảng rộng), `fitToWidth=1`, **lặp dòng tiêu đề 1–6**, footer `Trang &P/&N` |
+| Font | Times New Roman, chữ đen |
+| Cỡ chữ | **14 pt** (đúng như E-HSMT mẫu) |
+| Đầu biểu mẫu | `Mẫu số X (Webform trên Hệ thống)` — căn phải, đậm, 14 pt |
+| Tên biểu mẫu | CHỮ HOA — căn giữa, đậm |
+| Cuối biểu mẫu | `Ghi chú:` + các chú thích (1), (2)… đúng nguyên bản |
+| Số trang | lề dưới |
 
-Chi tiết + bảng cỡ chữ từng thành phần: `references/nd30-format.md`.
+Ba lỗi hay gặp khi tự dựng lại mẫu (dẫn tới "in ra không giống"):
+1. `docDefaults` theo **font theme** → run thiếu `rPr` ra Calibri.
+2. Thiếu style `Normal` / `pPrDefault` → Word tự chế cỡ chữ, dãn dòng.
+3. Thiếu footer → mất số trang; bảng để `autofit` → co cột, rớt dòng tiêu đề.
 
-### 3 lỗi khiến "in ra không giống format" (đã sửa, gặp lại thì xử lý ngay)
-1. `docDefaults` dùng **font theme** → run không set rPr sẽ in ra Calibri ⇒ ép Times New Roman.
-2. **Thiếu style `Normal`** + `pPrDefault` rỗng → Word tự chế (Calibri 11, dãn 1,08, after 8pt).
-3. **Thiếu footer** ⇒ mất số trang; **bảng autofit** ⇒ bị co cột, chữ wrap loạn.
+Dùng `fix_page_setup.py` để xử lý; **không sửa tay từng file**.
 
 ---
 
-## 4. Letterhead điền theo từng gói thầu
+## 4. Phân vai Word / Excel
 
-Không hard-code tên đơn vị. Mỗi file có 3 chế độ:
-
-| Mode | Dùng cho | Nội dung ô trái |
+| Loại | Định dạng | Lý do |
 |:--|:--|:--|
-| `BIDDER` (mặc định) | form do nhà thầu lập | `[TÊN NHÀ THẦU / LIÊN DANH NHÀ THẦU]` + `[Địa chỉ · Điện thoại · Email]` |
-| `EMPLOYER` | Form 17(a) | `[TÊN CHỦ ĐẦU TƯ / BÊN MỜI THẦU]` |
-| `NONE` | Attachment 1A/1B/2 | — |
+| Đơn dự thầu, thỏa thuận liên danh, bảo lãnh, cam kết | **Word** | Văn bản cần ký/đóng dấu, scan |
+| Danh mục, kê khai, bảng giá (06A, 06D, 08A–C, 10A–B, 11.x, 12A–C, 13A–C) | **Excel** | Nhiều dòng, cần công thức, lọc, tổng, in lặp tiêu đề |
 
-Khi phát hành cho một gói cụ thể, thay: tên nhà thầu/CĐT, địa chỉ, `Số: …/…-HSDT`,
-`[Địa danh]`, `ngày … tháng … năm …`.
-
----
-
-## 5. Danh mục 37 biểu mẫu (36 form theo HSMT + Attachment)
-
-**Word (11):** F01 Đơn dự thầu KT · F02 Ủy quyền · F03 Thỏa thuận liên danh · F04 Bảo đảm dự thầu ·
-F05a Thông tin nhà thầu · F05b Thông tin thành viên LD · F07B CV nhân sự · F17a/b Xác nhận ·
-F19a/b Đơn dự thầu tài chính.
-
-**Excel (11 workbook / 28 sheet):** F06A/B/C · F07A+F07C · F08 · F09A+B · F10A1+10A2+10B+11 ·
-F12+13+14+15+16 · F18A+B · ATT 1A+1B+2 · F20+21.1+21.2+21.3+22+23.
-
-Bảng ánh xạ đầy đủ form ↔ file ↔ HSMT reference: `references/form-index.md`.
+Trên Hệ thống các mẫu này là **webform** — file Excel ở đây dùng để **chuẩn bị dữ liệu offline**
+rồi nhập lên; file Word dùng để in/ký/scan khi HSMT yêu cầu bản giấy.
 
 ---
 
-## 6. Quy trình khi có gói thầu mới (checklist)
+## 5. Danh mục biểu mẫu EPC (32 mẫu — Chương IV, Mẫu số 10A)
 
-1. **Đọc danh mục form trong HSMT** — số Form/Attachment có thể khác bộ chuẩn; phải map lại.
-2. Copy bộ template ra thư mục gói thầu.
-3. Điền letterhead theo gói (tên CĐT/Bên mời thầu + tên nhà thầu).
-4. Điền dữ liệu: nhân sự, thiết bị, hợp đồng tương tự, tài chính, giá.
-5. Kiểm tra: `python3 scripts/fix_nd30.py --check <file>` cho mọi .docx phát hành.
-6. Đối chiếu checklist nộp thầu (Điều 11 HSMT) — đủ bản gốc/bản chụp/USB, ký + đóng dấu + giáp lai.
-7. Xuất PDF để nộp; giữ nguyên bản .docx/.xlsx gốc để chỉnh sửa.
+| Nhóm | Mẫu |
+|:--|:--|
+| Đơn & pháp lý | 02 Đơn dự thầu · 03 Thỏa thuận liên danh · 04A/04B Bảo lãnh dự thầu *(scan)* |
+| Kinh nghiệm | 05A1 HĐ EPC/EC/EP/PC tương tự · 05A2 HĐ cung cấp hàng hóa (P) · 05A3 HĐ xây lắp (C) · 05A4 HĐ tư vấn (E) · 05B Năng lực sản xuất hàng hóa |
+| Nhân sự & thiết bị | 06A Đề xuất nhân sự chủ chốt · 06B Lý lịch chuyên môn · 06C Kinh nghiệm chuyên môn · 06D Thiết bị thi công chủ yếu |
+| Lịch sử & tài chính | 07 HĐ không hoàn thành do lỗi nhà thầu · 08A Tình hình tài chính · 08B Nguồn lực tài chính · 08C NLTC hàng tháng |
+| Nhà thầu phụ | 09A Phạm vi công việc dùng NTP · 09B NTP đặc biệt · 09C Công ty con, thành viên |
+| Tiến độ & hàng hóa | 10A Bảng tiến độ thực hiện · 10B Đề xuất về giá hàng hóa |
+| Giá dự thầu | 11.1A–D (giá chưa gồm thuế) · 11.2A–D (giá đã gồm thuế, phí, lệ phí) — theo 4 loại hợp đồng |
+| Chi phí khác | 12A Bảng kê công nhật · 12B Khoản tạm tính · 12C Số liệu điều chỉnh |
+| Ưu đãi | 13A Hàng hóa hưởng ưu đãi · 13B/13C Chi phí sản xuất trong nước |
+
+Bảng chi tiết + tên file: `templates/EPC-10A/DANH-MUC-BIEU-MAU.md`.
 
 ---
 
-## 7. Cấu trúc repo
+## 6. Checklist khi làm HSDT
+
+1. Mở **Chương IV của E-HSMT thực tế** — đối chiếu danh mục biểu mẫu (số Mẫu, mục nào Webform,
+   mục nào Scan, mục nào phải nộp bản giấy). Số mẫu có thể khác bộ mẫu chuẩn.
+2. Tách bộ mẫu đúng loại gói: `tt79_extract.py sources/<mẫu đúng>.docx out/`.
+3. Chuẩn bị dữ liệu offline (Excel) cho các bảng 06–13.
+4. Nhập lên Hệ thống bằng **chữ ký số**; phần Scan thì in – ký – đóng dấu – scan – đính kèm.
+5. Kiểm tra: đúng mẫu, đúng cột, không thêm/bớt dòng tiêu đề, không còn chỗ trống bắt buộc.
+6. Lưu bản gốc `.docx/.xlsx` để chỉnh sửa; xuất PDF chỉ khi cần đối chiếu.
+
+---
+
+## 7. Cấu trúc skill
 
 ```text
-hsdt-forms-skill/
+hsdt-forms/
 ├── SKILL.md
-├── templates/                  # 22 file đã sinh sẵn — copy dùng ngay
-├── demo_output/                # bộ demo thành phẩm (letterhead + dữ liệu mẫu)
-├── examples/
-│   ├── demo_project.py         # script demo end-to-end
-│   └── preview/*.png           # ảnh render của bộ demo
+├── sources/                 # E-HSMT mẫu chính thức (TT79/2025/TT-BTC)
+├── templates/EPC-10A/       # 32 biểu mẫu EPC đã tách (Word + Excel)
+├── examples/demo_project.py # điền dữ liệu mẫu vào vài bảng để xem trước
 ├── scripts/
-│   ├── build_word.py           # sinh 11 Word   ← nguồn chính
-│   ├── build_excel.py          # sinh 11 Excel  ← nguồn chính
-│   ├── fill_letterhead.py      # điền letterhead/ngày/số hồ sơ vào .docx + .xlsx
-│   ├── fix_nd30.py             # kiểm tra & tự chuẩn hoá .docx
-│   └── build_all.sh
-└── references/{nd30-format.md, form-index.md}
+│   ├── tt79_extract.py      # tách biểu mẫu từ E-HSMT mẫu  ← công cụ chính
+│   └── fix_page_setup.py    # chuẩn hoá khổ giấy/lề/font .docx
+└── references/
+    ├── tt79-forms.md        # danh mục biểu mẫu + căn cứ pháp lý
+    └── tt79-layout.md       # đặc tả định dạng + 3 lỗi thường gặp
 ```
-
-Sửa nội dung biểu mẫu ⇒ sửa `scripts/build_word.py` / `build_excel.py` rồi chạy lại
-`build_all.sh` + copy kết quả vào `templates/` (giữ 2 nơi khớp nhau).
