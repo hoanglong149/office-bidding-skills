@@ -6,8 +6,6 @@ Nguồn: `TT79-M9A-E-HSMT-PC-01-tui.docx` — Chương IV. Biểu mẫu mời th
 |:--|:--|--:|:--|
 | 02 | ĐƠN DỰ THẦU (1) |  | `TT79-M02.docx` |
 | 03 | THỎA THUẬN LIÊN DANH | 1 | `TT79-M03.docx` |
-| 04A | BẢO LÃNH DỰ THẦU(1) |  | `TT79-M04A.docx` |
-| 04B | BẢO LÃNH DỰ THẦU(1) |  | `TT79-M04B.docx` |
 | 05A | TƯƠNG TỰ DO NHÀ THẦU THỰC HIỆN(1) | 1 | `TT79-M05A.docx` |
 | 05B | DO NHÀ THẦU THỰC HIỆN(1) | 1 | `TT79-M05B.docx` |
 | 05C | HỢP ĐỒNG XÂY LẮP (C) TƯƠNG TỰ DO NHÀ THẦU THỰC HIỆN(1) | 1 | `TT79-M05C.docx` |

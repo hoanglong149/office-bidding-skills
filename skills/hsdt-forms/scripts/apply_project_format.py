@@ -195,6 +195,24 @@ def apply_profile(doc: Document, profile: str, paper: str = "a4") -> int:
     return n
 
 
+# --------------------------------------------------------------- excel
+def stamp_excel(path: str, project: str, package: str, page_number: str = "footer") -> None:
+    """Ghi tên dự án / gói thầu vào **print header** của mọi sheet (bản in Excel)."""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(path)
+    # KHÔNG nhúng mã font/size vào text — openpyxl tự thêm từ .font/.size (nhúng sẽ bị lặp)
+    head = f"Project : {project}\nBidding Package : {package}"
+    for ws in wb.worksheets:
+        ws.oddHeader.left.text = head
+        ws.oddHeader.left.size = 9
+        ws.oddHeader.left.font = "Times New Roman,Italic"
+        if page_number == "footer":
+            ws.oddFooter.center.text = "Trang &P/&N"  # &P = số trang, &N = tổng số trang
+            ws.oddFooter.center.size = 9
+    wb.save(path)
+
+
 # --------------------------------------------------------------- zip surgery
 FOOTER_PART = "word/footerPage.xml"
 FOOTER_CT = "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"
@@ -377,7 +395,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("targets", nargs="+", help="thư mục hoặc file .docx")
     ap.add_argument("--config", default=None,
-                    help="file JSON của gói thầu: {project, package, logo_left, logo_right, paper, profile}")
+                    help="file JSON của gói thầu: {project, package, logo_left, logo_right, paper, profile, logo_height, page_number}")
     ap.add_argument("--project", default=None)
     ap.add_argument("--package", default=None)
     ap.add_argument("--logo-left", default=None)
@@ -385,6 +403,8 @@ def main() -> None:
     ap.add_argument("--profile", choices=["keep", "intl-epc"], default=None)
     ap.add_argument("--paper", choices=["a4", "letter"], default=None, help="mặc định a4")
     ap.add_argument("--logo-height", type=float, default=None, help="chiều cao logo (mm), mặc định 18")
+    ap.add_argument("--allow-placeholder", action="store_true",
+                    help="cho phép tên còn [ ] — chỉ dùng khi tạo mẫu định dạng, KHÔNG để nộp thầu")
     ap.add_argument("--page-number", choices=["footer", "header", "keep"], default=None,
                     help="vị trí số trang — mặc định footer")
     ap.add_argument("--out", default=None, help="thư mục ra (mặc định: sửa tại chỗ + .bak)")
@@ -401,6 +421,14 @@ def main() -> None:
     if not (project and package):
         raise SystemExit("Thiếu tên dự án / gói thầu. Dùng --project/--package "
                          "hoặc --config <file.json> (xem projects/_template.json).")
+    if a.allow_placeholder:
+        print("  (--allow-placeholder: giữ nguyên tên placeholder — dùng để tạo MẪU ĐỊNH DẠNG)")
+    elif any(c in (project + package) for c in "[]"):
+        raise SystemExit(
+            "Tên dự án / gói thầu còn là placeholder — điền TÊN THẬT của gói thầu vào "
+            "file cấu hình rồi chạy lại:\n"
+            "  cp projects/_template.json projects/<mã-gói>.json   # rồi sửa project/package\n"
+            f"  (đang có: project={project!r}, package={package!r})")
     logo_l = a.logo_left or cfg.get("logo_left")
     logo_r = a.logo_right or cfg.get("logo_right")
     paper = a.paper or cfg.get("paper", "a4")
@@ -408,12 +436,31 @@ def main() -> None:
     logo_h = a.logo_height or cfg.get("logo_height", 18.0)
     page_number = a.page_number or cfg.get("page_number", "footer")
 
-    files: list[str] = []
+    docx: list[str] = []
+    xlsx: list[str] = []
     for t in a.targets:
-        files += sorted(glob.glob(os.path.join(t, "*.docx"))) if os.path.isdir(t) else [t]
+        if os.path.isdir(t):
+            docx += sorted(glob.glob(os.path.join(t, "*.docx")))
+            xlsx += sorted(glob.glob(os.path.join(t, "*.xlsx")))
+        elif t.endswith(".xlsx"):
+            xlsx.append(t)
+        else:
+            docx.append(t)
 
     logos = [p for p in (logo_l, logo_r) if p]
-    for f in files:
+
+    for f in xlsx:
+        dst = f
+        if a.out:
+            os.makedirs(a.out, exist_ok=True)
+            dst = os.path.join(a.out, os.path.basename(f))
+            shutil.copy2(f, dst)
+        else:
+            shutil.copy2(f, f + ".bak")
+        stamp_excel(dst, project, package, page_number)
+        print(f"  ✓ {os.path.basename(dst)}  (excel: print header)")
+
+    for f in docx:
         dst = f
         if a.out:
             os.makedirs(a.out, exist_ok=True)
@@ -427,7 +474,7 @@ def main() -> None:
         doc.save(dst)
         inject_letterhead(dst, project, package, logos, logo_h, page_number)
         print(f"  ✓ {os.path.basename(dst)}  (profile={profile}/{paper}, số trang={page_number}, bảng={n}, logo={len(logos)})")
-    print(f"\n{len(files)} file → {a.out or 'sửa tại chỗ (.bak được tạo)'}")
+    print(f"\n{len(docx)} file Word + {len(xlsx)} file Excel → {a.out or 'sửa tại chỗ (.bak được tạo)'}")
 
 
 if __name__ == "__main__":

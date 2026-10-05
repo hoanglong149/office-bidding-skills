@@ -108,10 +108,13 @@ File HSDT thật thường có **letterhead tên dự án / tên gói thầu** �
 Mỗi gói thầu một file cấu hình — **không hard-code tên gói vào biểu mẫu**:
 
 ```bash
-cp projects/_template.json projects/<mã-gói>.json     # điền tên thật của gói
+cp projects/_template.json projects/<mã-gói>.json     # điền TÊN THẬT của gói
 python3 scripts/apply_project_format.py templates/EPC-10A \
   --config projects/<mã-gói>.json --out out/<mã-gói>
 ```
+
+`project` / `package` trong file cấu hình mặc định là **`[TÊN DỰ ÁN]` / `[TÊN GÓI THẦU]`** —
+điền theo từng gói. Script **dừng ngay** nếu tên còn dấu `[ ]`.
 
 | Tuỳ chọn | Mặc định | Ý nghĩa |
 |:--|:--|:--|
@@ -120,7 +123,8 @@ python3 scripts/apply_project_format.py templates/EPC-10A \
 | `--logo-height` | `18` mm | chiều cao logo (giữ tỉ lệ ảnh) |
 | `--page-number` | **footer** | số trang ở **chân trang** (header chỉ còn letterhead) · `header` · `keep` |
 
-Letterhead chèn vào `word/header1.xml` (bảng không viền: tên dự án + tên gói thầu, logo bên phải).
+Letterhead chèn vào `word/header1.xml` (bảng không viền: tên dự án + tên gói thầu, logo bên phải);
+với `.xlsx` thì ghi vào **print header** của mọi sheet (openpyxl `oddHeader`).
 Chi tiết + giá trị XML: `references/format-profiles.md`.
 
 ### 2.3. Chuẩn hoá khổ giấy / lề / font cho file .docx
@@ -165,11 +169,11 @@ rồi nhập lên; file Word dùng để in/ký/scan khi HSMT yêu cầu bản g
 
 ---
 
-## 5. Danh mục biểu mẫu EPC (32 mẫu — Chương IV, Mẫu số 10A)
+## 5. Danh mục biểu mẫu EPC (30 mẫu — Chương IV, Mẫu số 10A)
 
 | Nhóm | Mẫu |
 |:--|:--|
-| Đơn & pháp lý | 02 Đơn dự thầu · 03 Thỏa thuận liên danh · 04A/04B Bảo lãnh dự thầu *(scan)* |
+| Đơn & pháp lý | 02 Đơn dự thầu · 03 Thỏa thuận liên danh |
 | Kinh nghiệm | 05A1 HĐ EPC/EC/EP/PC tương tự · 05A2 HĐ cung cấp hàng hóa (P) · 05A3 HĐ xây lắp (C) · 05A4 HĐ tư vấn (E) · 05B Năng lực sản xuất hàng hóa |
 | Nhân sự & thiết bị | 06A Đề xuất nhân sự chủ chốt · 06B Lý lịch chuyên môn · 06C Kinh nghiệm chuyên môn · 06D Thiết bị thi công chủ yếu |
 | Lịch sử & tài chính | 07 HĐ không hoàn thành do lỗi nhà thầu · 08A Tình hình tài chính · 08B Nguồn lực tài chính · 08C NLTC hàng tháng |
@@ -180,6 +184,9 @@ rồi nhập lên; file Word dùng để in/ký/scan khi HSMT yêu cầu bản g
 | Ưu đãi | 13A Hàng hóa hưởng ưu đãi · 13B/13C Chi phí sản xuất trong nước |
 
 Bảng chi tiết + tên file: `templates/<bộ>/DANH-MUC-BIEU-MAU.md`; danh mục 5 bộ: `templates/DANH-MUC-TONG-HOP.md`.
+
+Mẫu **04A/04B (bảo lãnh dự thầu)** không đóng gói — TT79 đánh dấu *Scan đính kèm*: bảo lãnh do
+tổ chức tín dụng phát hành theo mẫu của họ.
 
 Số mẫu khác nhau giữa các loại gói (EPC 32 · xây lắp 25 · hàng hóa 32 · EC 26 · PC 35) — gói xây lắp không có mẫu 05A2/05A3, gói hàng hóa không có 05A1/05A3…
 

@@ -8,8 +8,6 @@ Nguồn: `TT79-M4A-E-HSMT-Hang-hoa-01-tui.docx` — Chương IV. Biểu mẫu m�
 | 02B | ĐƠN DỰ THẦU(1) |  | `TT79-M02B.docx` |
 | 02C | VĂN BẢN THỎA THUẬN |  | `TT79-M02C.docx` |
 | 03 | THỎA THUẬN LIÊN DANH(1) | 1 | `TT79-M03.docx` |
-| 04A | BẢO LÃNH DỰ THẦU(1) | 1 | `TT79-M04A.docx` |
-| 04B | BẢO LÃNH DỰ THẦU(1) | 1 | `TT79-M04B.docx` |
 | 05A |  | 2 | `TT79-M05A.docx` |
 | 05B |  | 2 | `TT79-M05B.docx` |
 | 06A | BẢNG ĐỀ XUẤT NHÂN SỰ CHỦ CHỐT | 1 | `TT79-M06A.docx` |

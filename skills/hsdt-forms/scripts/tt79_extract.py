@@ -43,6 +43,9 @@ MAU_RE = re.compile(r"^\s*Mẫu\s*(?:số|so)\s*([0-9]+(?:\.[0-9]+)?[A-Z]?)\s*\(
 CH4_BEGIN = re.compile(r"^\s*Chương\s+IV\b", re.I)
 CH4_END = re.compile(r"^\s*(Chương\s+V\b|Phần\s+(?:2\b|thứ\s+hai\b))", re.I)
 SKIP_NUM = {1}                      # Mẫu 01A–01E là biểu mẫu của Chủ đầu tư, không thuộc HSDT
+# TT79 đánh dấu "Scan đính kèm": do NGÂN HÀNG phát hành, nhà thầu không tự lập biểu mẫu này
+# → không đóng gói vào bộ mẫu (nội dung bảo lãnh do tổ chức tín dụng soạn theo mẫu của họ).
+SKIP_CODES = {"04A", "04B"}
 BAD_TITLE = ("(", "[", "-", "Ghi chú", "Mẫu số", "Nhà thầu", "Liệt kê", "Đối với", "Điều ")
 
 
@@ -317,7 +320,7 @@ def main() -> None:
     rows, n_docx, n_xlsx = [], 0, 0
     for code, title, i0, i1 in src.forms():
         n = mau_number(code)
-        if n == 0 or n in SKIP_NUM:
+        if n == 0 or n in SKIP_NUM or code in SKIP_CODES:
             continue
         if only and not any(code.startswith(p) for p in only):
             continue

@@ -6,8 +6,6 @@ Nguồn: `TT79-M10A-E-HSMT-EPC-01-tui.docx` — Chương IV. Biểu mẫu mời 
 |:--|:--|--:|:--|
 | 02 | ĐƠN DỰ THẦU (1) |  | `TT79-M02.docx` |
 | 03 | THỎA THUẬN LIÊN DANH | 1 | `TT79-M03.docx` |
-| 04A | BẢO LÃNH DỰ THẦU(1) |  | `TT79-M04A.docx` |
-| 04B | BẢO LÃNH DỰ THẦU(1) | 4 | `TT79-M04B.docx` |
 | 05B |  | 2 | `TT79-M05B.docx` |
 | 06A | BẢNG ĐỀ XUẤT NHÂN SỰ CHỦ CHỐT | 1 | `TT79-M06A.docx` |
 | 06B | BẢNG LÝ LỊCH CHUYÊN MÔN CỦA NHÂN SỰ CHỦ CHỐT | 1 | `TT79-M06B.docx` |

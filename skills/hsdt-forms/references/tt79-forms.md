@@ -36,13 +36,14 @@ Mỗi E-HSMT mẫu gồm 3 phần: **Phần 1** Thủ tục đấu thầu (Chư�
 
 ## Chương IV — Biểu mẫu mời thầu và dự thầu (gói EPC, Mẫu 10A)
 
-Biểu mẫu **của nhà thầu** (phần HSDT) — 32 mẫu. Biểu mẫu 01A–01E là của Chủ đầu tư, **không** thuộc HSDT.
+Biểu mẫu **của nhà thầu** (phần HSDT) — 30 mẫu được đóng gói. Biểu mẫu 01A–01E là của Chủ đầu tư,
+**không** thuộc HSDT. **04A/04B (bảo lãnh dự thầu) không đóng gói**: TT79 đánh dấu *Scan đính kèm* —
+do tổ chức tín dụng phát hành theo mẫu của họ.
 
 | Mẫu | Tên | Cách thức | Nội dung chính |
 |:--|:--|:--|:--|
 | 02 | Đơn dự thầu | Webform | Ngày, tên gói thầu, tên nhà thầu + MST, giá dự thầu, tỷ lệ giảm giá, hiệu lực E-HSDT, bảo đảm dự thầu, 11 cam kết |
 | 03 | Thỏa thuận liên danh | Webform | Thành viên, phân công trách nhiệm, tỷ lệ % giá trị đảm nhận, hiệu lực |
-| 04A / 04B | Bảo lãnh dự thầu (độc lập / liên danh) | **Scan & đính kèm** | Bên thụ hưởng, ngày phát hành, số bảo lãnh, giá trị, hiệu lực |
 | 05A1 | Hợp đồng EPC, EC, EP, PC tương tự | Webform | Tên/số HĐ, ngày ký, ngày hoàn thành, giá trị, chủ đầu tư, phạm vi |
 | 05A2 | Hợp đồng cung cấp hàng hóa (P) tương tự | Webform | như trên |
 | 05A3 | Hợp đồng xây lắp (C) tương tự | Webform | như trên |

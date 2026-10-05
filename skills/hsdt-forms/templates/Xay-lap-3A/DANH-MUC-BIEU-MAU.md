@@ -6,8 +6,6 @@ Nguồn: `TT79-M3A-E-HSMT-Xay-lap-01-tui.docx` — Chương IV. Biểu mẫu m�
 |:--|:--|--:|:--|
 | 02 | ĐƠN DỰ THẦU (1) |  | `TT79-M02.docx` |
 | 03 | THỎA THUẬN LIÊN DANH | 1 | `TT79-M03.docx` |
-| 04A | BẢO LÃNH DỰ THẦU(1) |  | `TT79-M04A.docx` |
-| 04B | BẢO LÃNH DỰ THẦU(1) |  | `TT79-M04B.docx` |
 | 05 | HỢP ĐỒNG TƯƠNG TỰ DO NHÀ THẦU THỰC HIỆN(1) | 1 | `TT79-M05.docx` |
 | 06A | BẢNG ĐỀ XUẤT NHÂN SỰ CHỦ CHỐT | 1 | `TT79-M06A.docx` |
 | 06B | BẢNG LÝ LỊCH CHUYÊN MÔN CỦA NHÂN SỰ CHỦ CHỐT | 1 | `TT79-M06B.docx` |

@@ -20,9 +20,11 @@ Dùng khi nộp thầu trên Hệ thống (E-HSDT) và HSMT yêu cầu đúng b�
 
 ---
 
-## 2. `intl-epc` — theo HSDT gói quốc tế (EDF/EPC nước ngoài)
+## 2. `intl-epc` — theo HSDT gói quốc tế
 
-Trích từ file HSDT thật của gói EPC Phả Lại (Nhà thầu liên danh TUNA-XINLONG-IPC).
+Trích từ **file HSDT mẫu** dùng để bắt toạ độ letterhead và chuẩn trình bày:
+`投标函 Form No. 02_Rev final.docx` (gói EPC nhiệt điện — Nhà thầu liên danh TUNA-XINLONG-IPC).
+Các giá trị dưới đây là **tham số định dạng**, không gắn với một dự án cụ thể.
 
 | Thông số | Giá trị | Nguồn |
 |:--|:--|:--|
@@ -65,6 +67,9 @@ cp projects/_template.json projects/<mã-gói>.json     # rồi điền tên th�
 python3 scripts/apply_project_format.py templates/EPC-10A \
   --config projects/<mã-gói>.json --out out/<mã-gói>
 ```
+
+Tên dự án / gói thầu trong `_template.json` là **placeholder** (bộ mẫu cố ý để trống) `[TÊN DỰ ÁN]` / `[TÊN GÓI THẦU]`;
+script từ chối chạy khi tên vẫn còn dấu `[ ]` — không đóng dấu tên giả lên biểu mẫu.
 
 Hoặc truyền trực tiếp:
 
