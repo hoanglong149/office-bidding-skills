@@ -18,8 +18,8 @@ Profile định dạng:
 
 Dùng:
     python3 apply_project_format.py <thư_mục_hoặc_file...> \\
-        --project "Retrofit and upgrading of ..." \\
-        --package "Engineering, Procurement and Construction (EPC) of ..." \\
+        --project "<TÊN DỰ ÁN>" \\
+        --package "<TÊN GÓI THẦU>" \\
         [--logo-left logo1.png --logo-right logo2.png] \\
         [--profile intl-epc] [--out <thư_mục_ra>] [--suffix "-PL"]
 

@@ -40,8 +40,13 @@ NS = {"w": W, "r": R}
 # Header biểu mẫu thật luôn có hậu tố "(Webform trên Hệ thống)" / "(Scan đính kèm)";
 # dòng tiêu đề bìa ("Mẫu số 10A_E-HSMT_EPC 01 túi") không có hậu tố này nên bị loại.
 MAU_RE = re.compile(r"^\s*Mẫu\s*(?:số|so)\s*([0-9]+(?:\.[0-9]+)?[A-Z]?)\s*\(")
-CH4_BEGIN = re.compile(r"^\s*Chương\s+IV\b", re.I)
-CH4_END = re.compile(r"^\s*(Chương\s+V\b|Phần\s+(?:2\b|thứ\s+hai\b))", re.I)
+# HSMT quốc tế (tiếng Anh) đánh số kiểu "Form No. 02", "Form 11.1A", "Form 2A"
+FORM_RE_EN = re.compile(r"^\s*Form\s*(?:No\.?)?\s*([0-9]+(?:\.[0-9]+)?[A-Za-z]?)\b[ \t]*(.*)$",
+                        re.I)
+FORM_RE = {"vi": MAU_RE, "en": FORM_RE_EN}
+CH4_BEGIN = re.compile(r"^\s*(?:Chương|Chapter)\s+IV\b", re.I)
+CH4_END = re.compile(r"^\s*(Chương\s+V\b|Phần\s+(?:2\b|thứ\s+hai\b)|Chapters*\s+V\b|Parts*\s+2\b)",
+                     re.I)
 SKIP_NUM = {1}                      # Mẫu 01A–01E là biểu mẫu của Chủ đầu tư, không thuộc HSDT
 # TT79 đánh dấu "Scan đính kèm": do NGÂN HÀNG phát hành, nhà thầu không tự lập biểu mẫu này
 #: không đóng gói vào bộ mẫu (nội dung bảo lãnh do tổ chức tín dụng soạn theo mẫu của họ).
@@ -116,6 +121,18 @@ class Source:
                 self.blocks.append((el, "p", para_text(el)))
             elif tag == "tbl":
                 self.blocks.append((el, "tbl", ""))
+        self.lang = "vi"
+
+    def detect_lang(self) -> str:
+        """'vi' nếu HSMT đánh số kiểu `Mẫu số 02 (`. `en` nếu kiểu `Form No. 02`."""
+        vi = sum(1 for _e, k, t in self.blocks if k == "p" and MAU_RE.match(t))
+        en = sum(1 for _e, k, t in self.blocks if k == "p" and FORM_RE_EN.match(t))
+        if vi >= en and vi:
+            return "vi"
+        if en:
+            return "en"
+        raise SystemExit("Không nhận ra đầu biểu mẫu (cần 'Mẫu số XX (' hoặc 'Form No. XX'). "
+                         "Kiểm lại file Chương IV, hoặc báo lại để bổ sung mẫu nhận dạng.")
 
     def window(self):
         """Cửa sổ Chương IV — chọn occurrence chứa nhiều header biểu mẫu nhất.
@@ -131,20 +148,43 @@ class Source:
                 if k == "p" and CH4_END.match(t):
                     b = i
                     break
-            n = sum(1 for i in range(a, b) if self.blocks[i][1] == "p" and MAU_RE.match(self.blocks[i][2]))
+            rex = FORM_RE.get(getattr(self, "lang", "vi"), MAU_RE)
+            n = sum(1 for i in range(a, b)
+                    if self.blocks[i][1] == "p" and rex.match(self.blocks[i][2]))
             if n > best_n:
                 best, best_n = (a, b), n
         return best
 
     def forms(self):
         a, b = self.window()
-        heads = [(MAU_RE.match(t).group(1).upper(), i)
-                 for i, (_e, k, t) in enumerate(self.blocks) if k == "p" and a <= i < b and MAU_RE.match(t)]
+        rex = FORM_RE[self.lang]
+        heads = []
+        for i, (_e, k, t) in enumerate(self.blocks):
+            if k != "p" or not (a <= i < b):
+                continue
+            m = rex.match(t)
+            if not m:
+                continue
+            code = m.group(1).upper()
+            if self.lang == "en":                       # 2A -> 02A cho đồng nhất tên file
+                num, suf = re.match(r"(\d+)(.*)", code).groups()
+                code = num.zfill(2) + suf
+            if any(c == code for c, _ in heads):         # cùng mã xuất hiện lặp (tiêu đề dài xuống dòng)
+                continue
+            heads.append((code, i))
         out = []
         for k, (code, i) in enumerate(heads):
             i_end = heads[k + 1][1] if k + 1 < len(heads) else b
             out.append((code, self.pick_title(i, i_end), i, i_end))
         return out
+
+    def inline_title(self, i: int) -> str:
+        """Phần còn lại trên chính dòng header (`Form No. 09A SCOPE OF WORK ...`)."""
+        if self.lang != "en":
+            return ""
+        m = FORM_RE_EN.match(self.blocks[i][2])
+        rest = (m.group(2) or "").strip() if m else ""
+        return rest if len(rest) >= 8 else ""
 
     def pick_title(self, i: int, i_end: int) -> str:
         """Tiêu đề biểu mẫu theo thứ tự ưu tiên:
@@ -153,6 +193,9 @@ class Source:
         2. đoạn bold hoặc căn giữa (≥ 2 từ)
         3. ô CHỮ HOA ở 3 dòng đầu của bảng (một số mẫu để tiêu đề trong bảng)
         """
+        inline = self.inline_title(i)
+        if inline:
+            return inline
         GENERIC = {"STT", "TT", "I", "II", "III", "IV", "V", "A", "B", "G"}
 
         def ok(t: str) -> bool:
@@ -309,12 +352,19 @@ def main() -> None:
     ap.add_argument("template")
     ap.add_argument("out", nargs="?", default="tt79_forms")
     ap.add_argument("--only", default="", help="vd: 02,06,11 — lọc theo tiền tố mã mẫu")
+    ap.add_argument("--lang", choices=["auto", "vi", "en"], default="auto",
+                    help="kiểu đánh số biểu mẫu: vi = 'Mẫu số 02 (' (mặc định tự nhận), en = 'Form No. 02'")
     ap.add_argument("--no-excel", dest="excel", action="store_false", default=True)
     ap.add_argument("--keep-media", action="store_true", default=False)
     a = ap.parse_args()
 
     os.makedirs(a.out, exist_ok=True)
     src = Source(a.template)
+    if a.lang == "auto":
+        src.lang = src.detect_lang()
+    else:
+        src.lang = a.lang
+    print(f"Nguồn: {os.path.basename(a.template)}  |  kiểu đánh số: {src.lang}")
     only = [p.strip().upper() for p in a.only.split(",") if p.strip()]
 
     rows, n_docx, n_xlsx = [], 0, 0

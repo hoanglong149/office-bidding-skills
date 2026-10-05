@@ -23,8 +23,8 @@ Dùng khi nộp thầu trên Hệ thống (E-HSDT) và HSMT yêu cầu đúng b�
 ## 2. `intl-epc` — theo HSDT gói quốc tế
 
 Trích từ **file HSDT mẫu** dùng để bắt toạ độ letterhead và chuẩn trình bày:
-`投标函 Form No. 02_Rev final.docx` (gói EPC nhiệt điện — Nhà thầu liên danh TUNA-XINLONG-IPC).
-Các giá trị dưới đây là **tham số định dạng**, không gắn với một dự án cụ thể.
+Bản gốc do người dùng cung cấp: form "Letter of Bid" của một gói EPC nhiệt điện,
+nhà thầu liên danh quốc tế (tên file gốc viết bằng tiếng Trung). Các giá trị dưới đây là **tham số định dạng**, không gắn với một dự án cụ thể.
 
 | Thông số | Giá trị | Nguồn |
 |:--|:--|:--|

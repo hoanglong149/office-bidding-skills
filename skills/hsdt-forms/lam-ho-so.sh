@@ -29,7 +29,7 @@ ask() {  # ask "câu hỏi" "mặc định"  -> in ra giá trị
 
 # --- 1. mã gói ---
 while :; do
-  MA_GOI="$(ask "Mã gói thầu (viết liền, không dấu — vd OFFGAS-EPC, PL-EPC)")"
+  MA_GOI="$(ask "Mã gói thầu (viết liền, không dấu — vd GOI-EPC-01)")"
   [ -n "$MA_GOI" ] && break
   echo "  ! Phải nhập mã gói."
 done
@@ -65,7 +65,7 @@ done
 
 # --- 5. logo ---
 echo
-echo "Logo:  Enter = dùng logo IPC E&C có sẵn trong skill"
+echo "Logo:  Enter = dùng logo mặc định trong assets/"
 LOGO="$(ask "Đường dẫn file logo (PNG/JPG)" "assets/logo-ipc-ec.png")"
 [ -f "$DIR/$LOGO" ] || [ -f "$LOGO" ] || { echo "  ! Không thấy file logo — bỏ logo."; LOGO=""; }
 

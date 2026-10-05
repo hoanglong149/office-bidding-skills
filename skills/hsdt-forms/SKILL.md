@@ -120,6 +120,9 @@ Chọn đúng bộ theo loại gói thầu trong `templates/` rồi copy ra thư
 Gói EPC hai túi hồ sơ hoặc gói thực tế: xem §3.1.
 
 ### 3.1. Tách bộ biểu mẫu cho loại gói thầu khác
+
+Script nhận cả hai kiểu đánh số: `Mẫu số 02 (` (E-HSMT Việt Nam, TT79) và `Form No. 02`
+(HSMT quốc tế, tiếng Anh). Tự nhận dạng; ép bằng `--lang vi` hoặc `--lang en` khi cần.
 ```bash
 python3 scripts/tt79_extract.py sources/TT79-M3A-E-HSMT-Xay-lap-01-tui.docx  out/xay-lap
 python3 scripts/tt79_extract.py sources/TT79-M4A-E-HSMT-Hang-hoa-01-tui.docx  out/hang-hoa
