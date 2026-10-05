@@ -3,3 +3,7 @@ __pycache__/
 *.bak
 .DS_Store
 skills/hsdt-forms/tt79_forms/
+
+# Cấu hình gói thầu thật (chứa tên dự án/gói của khách hàng): không commit
+skills/hsdt-forms/projects/*.json
+!skills/hsdt-forms/projects/_template.json
