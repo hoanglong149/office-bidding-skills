@@ -127,23 +127,49 @@ def fix_ct(ct: str) -> str:
 
 
 def analyze(path: str) -> dict:
+    """Kiểm tra khổ giấy / lề / font / số trang.
+
+    Tự nhận dạng biểu mẫu HSDT (`Mẫu số …`) — các file này kế thừa định dạng của E-HSMT mẫu
+    nên KHÔNG có `pPrDefault` dày và đặt số trang ở **header** (không phải footer).
+    """
     with zipfile.ZipFile(path) as z:
         names = z.namelist()
         styles = z.read("word/styles.xml").decode("utf-8", "ignore")
         doc = z.read("word/document.xml").decode("utf-8", "ignore")
+        parts = " ".join(
+            z.read(n).decode("utf-8", "ignore")
+            for n in names if re.match(r"word/(header|footer)\d*\.xml", n))
+    hsdt = bool(re.search(r"Mẫu\s*số\s*\d", doc)) or "Bidding Package" in parts
     prob, ok = [], []
+
     (ok if 'w:styleId="Normal"' in styles else prob).append(
         "style Normal" if 'w:styleId="Normal"' in styles else "thiếu style Normal")
-    good = bool(re.search(r'<w:pPrDefault>\s*<w:pPr>', styles))
-    (ok if good else prob).append("pPrDefault có dãn dòng" if good else "pPrDefault rỗng (thiếu dãn dòng)")
-    has_ftr = "word/footer1.xml" in names and "footerReference" in doc
-    (ok if has_ftr else prob).append("footer số trang" if has_ftr else "không có footer đánh số trang")
-    mar = re.search(r'<w:pgMar ([^/>]*)/>', doc)
+
+    if hsdt:
+        ok.append("biểu mẫu HSDT (giữ định dạng theo E-HSMT mẫu)")
+    else:
+        good = bool(re.search(r"<w:pPrDefault>\s*<w:pPr>", styles))
+        (ok if good else prob).append("pPrDefault có dãn dòng" if good else "pPrDefault rỗng (thiếu dãn dòng)")
+
+    numbered = bool(re.search(r"PAGE", parts)) and bool(
+        re.search(r"<w:(header|footer)Reference", doc))
+    (ok if numbered else prob).append(
+        "số trang (header/footer)" if numbered else "chưa gắn số trang vào header/footer")
+
+    mar = re.search(r"<w:pgMar ([^/>]*)/>", doc)
     if mar and f'w:left="{MAR_LEFT}"' in mar.group(1) and f'w:right="{MAR_RIGHT}"' in mar.group(1):
         ok.append("lề trang")
     else:
         prob.append(f"lề chưa chuẩn (cần trái {MAR_LEFT} / phải {MAR_RIGHT} twips)")
-    return {"prob": prob, "ok": ok}
+
+    pg = re.search(r'<w:pgSz ([^/>]*)/>', doc)
+    if pg:
+        w = re.search(r'w:w="(\d+)"', pg.group(1))
+        h = re.search(r'w:h="(\d+)"', pg.group(1))
+        if w and h:
+            w_mm, h_mm = round(int(w.group(1)) * 25.4 / 1440), round(int(h.group(1)) * 25.4 / 1440)
+            ok.append("khổ A4" if (w_mm, h_mm) == (210, 297) else f"khổ {w_mm}×{h_mm} mm")
+    return {"prob": prob, "ok": ok, "hsdt": hsdt}
 
 
 def process(path: str, check_only=False) -> dict:

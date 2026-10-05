@@ -1,6 +1,6 @@
 # Danh mục biểu mẫu dự thầu — TT 79/2025/TT-BTC
 
-Nguồn: `10. Mẫu số 10A_E-HSMT_EPC 01 túi.docx` — Chương IV. Biểu mẫu mời thầu và dự thầu
+Nguồn: `TT79-M10A-E-HSMT-EPC-01-tui.docx` — Chương IV. Biểu mẫu mời thầu và dự thầu
 
 | Mẫu | Tên biểu mẫu | Sheet Excel | File Word |
 |:--|:--|--:|:--|

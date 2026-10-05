@@ -100,7 +100,29 @@ python3 scripts/tt79_extract.py <E-HSMT.docx> out --no-excel        # chỉ Word
 
 Ra: `TT79-M<mã>-<tên>.docx` + `TT79-M<mã>-<tên>.xlsx` (mỗi bảng → 1 sheet) + `DANH-MUC-BIEU-MAU.md`.
 
-### 2.2. Chuẩn hoá khổ giấy / lề / font cho file .docx
+### 2.2. Đóng dấu letterhead dự án + áp định dạng gói thầu
+
+File HSDT thật thường có **letterhead tên dự án / tên gói thầu** ở đầu mỗi trang
+(bảng không viền: nội dung bên trái, logo bên phải) và định dạng bảng/ô riêng của gói.
+
+```bash
+python3 scripts/apply_project_format.py templates/EPC-10A \
+  --project "<tên dự án>" \
+  --package "<tên gói thầu>" \
+  --logo-right assets/logo-ipc-ec.png \
+  --profile intl-epc \
+  --out out/EPC-<mã gói> --suffix=-PL
+```
+
+| Profile | Khổ giấy | Bảng / ô |
+|:--|:--|:--|
+| `keep` (mặc định) | giữ nguyên A4 của E-HSMT mẫu | giữ nguyên |
+| `intl-epc` | US Letter 216 × 279 mm, lề 20/20/30/20 | viền `single` 0,5 pt, `tblLayout=fixed`, ô canh giữa dọc, chữ ô **TNR 13 pt**, hàng tiêu đề đậm + canh giữa |
+
+Letterhead chèn vào `word/header1.xml`; nội dung cũ (field `PAGE`) được giữ lại.
+Chi tiết + giá trị XML: `references/format-profiles.md`.
+
+### 2.3. Chuẩn hoá khổ giấy / lề / font cho file .docx
 ```bash
 python3 scripts/fix_page_setup.py --check file.docx     # kiểm tra
 python3 scripts/fix_page_setup.py         file.docx     # sửa (tạo .bak)
@@ -119,7 +141,7 @@ python3 scripts/fix_page_setup.py         file.docx     # sửa (tạo .bak)
 | Đầu biểu mẫu | `Mẫu số X (Webform trên Hệ thống)` — căn phải, đậm, 14 pt |
 | Tên biểu mẫu | CHỮ HOA — căn giữa, đậm |
 | Cuối biểu mẫu | `Ghi chú:` + các chú thích (1), (2)… đúng nguyên bản |
-| Số trang | lề dưới |
+| Số trang | field `PAGE` (đặt ở header hoặc footer tuỳ HSMT) |
 
 Ba lỗi hay gặp khi tự dựng lại mẫu (dẫn tới "in ra không giống"):
 1. `docDefaults` theo **font theme** → run thiếu `rPr` ra Calibri.
@@ -183,9 +205,12 @@ hsdt-forms/
 ├── templates/               # 5 bộ biểu mẫu đã tách (EPC, xây lắp, hàng hóa, EC, PC)
 ├── examples/demo_project.py # điền dữ liệu mẫu vào vài bảng để xem trước
 ├── scripts/
-│   ├── tt79_extract.py      # tách biểu mẫu từ E-HSMT mẫu  ← công cụ chính
-│   └── fix_page_setup.py    # chuẩn hoá khổ giấy/lề/font .docx
+│   ├── tt79_extract.py            # tách biểu mẫu từ E-HSMT mẫu       ← công cụ chính
+│   ├── apply_project_format.py    # letterhead dự án + profile định dạng
+│   └── fix_page_setup.py          # kiểm tra / chuẩn hoá khổ giấy-lề-font-số trang
+├── assets/                  # logo dùng cho letterhead
 └── references/
     ├── tt79-forms.md        # danh mục biểu mẫu + căn cứ pháp lý
-    └── tt79-layout.md       # đặc tả định dạng + 3 lỗi thường gặp
+    ├── tt79-layout.md       # đặc tả định dạng + 3 lỗi thường gặp
+    └── format-profiles.md   # profile định dạng + letterhead dự án
 ```

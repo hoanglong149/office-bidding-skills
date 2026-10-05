@@ -182,6 +182,25 @@ class Source:
 
 
 # ------------------------------------------------------------------ writers
+def strip_dangling_media_rels(rels_xml: bytes, keep: set[str]) -> bytes:
+    """Xoá `<Relationship Target="media/...">` trỏ tới file media đã bị lược bỏ.
+
+    Không xoá được thì Word vẫn mở (bỏ qua), nhưng python-docx báo lỗi khi đọc lại file —
+    để lại quan hệ mồ côi là lỗi dữ liệu, phải dọn.
+    """
+    text = rels_xml.decode("utf-8")
+    kept = {n.rsplit("/", 1)[-1] for n in keep}
+
+    def keep_or_drop(m: re.Match) -> str:
+        t = re.search(r'Target="([^"]+)"', m.group(0))
+        if t and t.group(1).startswith("media/") and t.group(1).rsplit("/", 1)[-1] not in kept:
+            return ""
+        return m.group(0)
+
+    new = re.sub(r"<Relationship\b[^>]*/>", keep_or_drop, text)
+    return new.encode("utf-8") if new != text else rels_xml
+
+
 def write_form(src: Source, dst: str, i0: int, i_end: int, keep_media: bool) -> None:
     """Ghi file mới = bản sao nguồn, body chỉ còn [i0, i_end) + sectPr gốc.
 
@@ -210,12 +229,17 @@ def write_form(src: Source, dst: str, i0: int, i_end: int, keep_media: bool) -> 
 
     with zipfile.ZipFile(src.path) as zin, zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as zout:
         for it in zin.infolist():
-            if it.filename == "word/document.xml":
+            n = it.filename
+            if n == "word/document.xml":
                 zout.writestr(it, xml)
-            elif (not keep_media) and it.filename.startswith("word/media/") and it.filename not in keep:
                 continue
-            else:
-                zout.writestr(it, zin.read(it.filename))
+            if (not keep_media) and n.startswith("word/media/") and n not in keep:
+                continue
+            blob = zin.read(n)
+            # bỏ quan hệ trỏ tới media đã xoá (tránh rels "mồ côi" làm hỏng file khi mở lại)
+            if (not keep_media) and n.endswith(".rels"):
+                blob = strip_dangling_media_rels(blob, keep)
+            zout.writestr(it, blob)
 
 
 def write_excel(src: Source, dst: str, i0: int, i_end: int) -> int:
