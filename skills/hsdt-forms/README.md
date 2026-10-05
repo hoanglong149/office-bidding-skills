@@ -102,8 +102,11 @@ Tách 32 biểu mẫu mất **< 1 giây** (giữ nguyên 100 % định dạng g�
 
 ## Cài đặt
 
-- **Chỉ dùng biểu mẫu** (`templates/`): không cần gì.
-- **Chạy script**: Python 3.9+ và `pip install -r requirements.txt` (`lxml`, `python-docx`, `openpyxl`).
+- Chỉ dùng biểu mẫu trong `templates/`: không cần cài gì.
+- Chạy script: Python 3.9+ và `pip install -r requirements.txt` (lxml, python-docx, openpyxl).
+
+Hướng dẫn cài CLI theo từng nền tảng (macOS, Linux, Windows, WSL): xem
+[mục Cài đặt ở README gốc](../../README.md#cài-đặt).
 
 ### Dùng như skill cho agent
 ```bash
@@ -163,3 +166,7 @@ office-bidding-skills/
 ## License
 
 MIT — xem [LICENSE](LICENSE).
+
+## Tác giả
+
+Hoàng Long - [github.com/hoanglong149](https://github.com/hoanglong149)
