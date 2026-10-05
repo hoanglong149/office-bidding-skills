@@ -80,10 +80,9 @@ def header_block(ws, *, code, en, vn, ncol=6, mode="BIDDER", money=None):
     ws.cell(3, 1, vn).font = Font(name=FONT, size=BODY_SZ, italic=True)
     ws.cell(3, 1).alignment = C
     ws.merge_cells(start_row=4, start_column=1, end_row=4, end_column=ncol)
-    ws.cell(4, 1, "Letterhead điền theo từng gói thầu: tên Chủ đầu tư / Bên mời thầu và tên Nhà thầu."
-            + (f"   |   Đơn vị tiền: {money}" if money else "")).font = Font(
-        name=FONT, size=9, italic=True)
-    ws.cell(4, 1).alignment = C
+    if money:
+        ws.cell(4, 1, f"Đơn vị tiền: {money}").font = Font(name=FONT, size=9, italic=True)
+        ws.cell(4, 1).alignment = C
     ws.row_dimensions[1].height = 30
     ws.row_dimensions[2].height = 30
     return 6  # dòng bắt đầu bảng

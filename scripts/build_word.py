@@ -191,9 +191,7 @@ def header_block(doc, *, code="", en="", vn="", mode="BIDDER",
     if en:
         p(doc, en, bold=True, size=Pt(14), align=CENTER, after=Pt(2))
     if vn:
-        p(doc, vn, italic=True, size=Pt(12), align=CENTER, after=Pt(6))
-    p(doc, "Letterhead điền theo từng gói thầu: tên Chủ đầu tư / Bên mời thầu và tên Nhà thầu.",
-      italic=True, size=Pt(10), align=CENTER, after=Pt(10))
+        p(doc, vn, italic=True, size=Pt(12), align=CENTER, after=Pt(10))
 
 
 def signature(doc, left_label="ĐẠI DIỆN HỢP PHÁP CỦA NHÀ THẦU",
